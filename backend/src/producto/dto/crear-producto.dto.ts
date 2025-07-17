@@ -17,6 +17,11 @@ export class CrearProductoDto {
   @IsNotEmpty()
   stock: string;
 
+  @ApiProperty({ description: 'idAdministrador ' })
+  @IsString()
+  @IsNotEmpty()
+  idAdministrador: string;
+
   // @ApiProperty({ description: 'Imagen del producto' })
   // @IsString()
   // @IsNotEmpty()

@@ -1,4 +1,5 @@
 import {
+  HttpException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -11,10 +12,9 @@ const toStream = require('buffer-to-stream');
 
 @Injectable()
 export class ProductoService {
-  constructor(private readonly prismaService: PrismaService
-  ) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
-  async crearProducto(crearProductoDto: CrearProductoDto, imagen: string ) {
+  async crearProducto(crearProductoDto: CrearProductoDto, imagen: string) {
     try {
       const productoNuevo = await this.prismaService.producto.create({
         data: {
@@ -23,6 +23,7 @@ export class ProductoService {
           stock: Number(crearProductoDto.stock),
           imagen: imagen,
           precio: Number(crearProductoDto.precio),
+          idAdministrador: crearProductoDto.idAdministrador,
         },
       });
       return productoNuevo;
@@ -35,7 +36,7 @@ export class ProductoService {
     return new Promise((resolve, reject) => {
       const upload = v2.uploader.upload_stream(
         { resource_type: 'auto' },
-        (error, result:UploadApiResponse) => {
+        (error, result: UploadApiResponse) => {
           if (error) {
             reject(
               new InternalServerErrorException('Error al subir la imagen'),
@@ -66,7 +67,30 @@ export class ProductoService {
       if (error.code === 'P2025') {
         throw new NotFoundException(`No se encontró el producto con id: ${id}`);
       }
-      throw new InternalServerErrorException('Error al buscar el producto por ID',);
+      throw new InternalServerErrorException(
+        'Error al buscar el producto por ID',
+      );
+    }
+  }
+
+  async buscarProductoPorNombre(nombre: string) {
+    try {
+      const producto = await this.prismaService.producto.findMany({
+        where: {
+          nombre: { contains: nombre, mode: 'insensitive', startsWith: nombre },
+        },
+      });
+      if (producto.length === 0) {
+        throw new NotFoundException('No hay resultados para tu busqueda');
+      }
+      return producto;
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException(
+        'Error al buscar el producto por nombre',
+      );
     }
   }
 
@@ -106,6 +130,33 @@ export class ProductoService {
         throw new NotFoundException(`No se encontró el producto con id: ${id}`);
       }
       throw new InternalServerErrorException('Error al eliminar el producto');
+    }
+  }
+
+  async verProductoSegunAdministrador(id: string) {
+    try {
+      const productos = await this.prismaService.producto.findMany({
+        where: { idAdministrador: { in: [id] } },
+        select: {
+          id: true,
+          categoria: true,
+          nombre: true,
+          stock: true,
+          imagen: true,
+          precio: true,
+        },
+      });
+      if (productos.length === 0) {
+        throw new NotFoundException(
+          `No se encontraron productos con él: ${id}`,
+        );
+      }
+      return productos;
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Error al conseguir el producto');
     }
   }
 }
