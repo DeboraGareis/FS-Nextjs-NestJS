@@ -8,6 +8,7 @@ import { ProductoModule } from './producto/producto.module';
 import { DetalleOrdenModule } from './detalle-orden/detalle-orden.module';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthModule } from './auth/auth.module';
+import { MensajeModule } from './mensaje/mensaje.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { AuthModule } from './auth/auth.module';
     ProductoModule,
     DetalleOrdenModule,
     AuthModule,
+    MensajeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

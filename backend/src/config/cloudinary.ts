@@ -1,8 +1,4 @@
 import { v2 as cloudinary } from 'cloudinary';
-import { config as dotenvConfig } from 'dotenv';
-
-// Cargo variables del .env
-dotenvConfig({ path: '.env' });
 
 // Configuracion Cloudinary
 cloudinary.config({

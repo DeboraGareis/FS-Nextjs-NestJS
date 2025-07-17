@@ -9,11 +9,14 @@ import {
   Patch,
   Post,
   UploadedFile,
-  UseGuards, 
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { ProductoService } from './producto.service';
-import { CrearProductoDto, CrearProductoSwaggerSchema } from './dto/crear-producto.dto';
+import {
+  CrearProductoDto,
+  CrearProductoSwaggerSchema,
+} from './dto/crear-producto.dto';
 import { ActualizarProductoDto } from './dto/actualizar-producto.dto';
 import {
   ApiBearerAuth,
@@ -35,11 +38,10 @@ import { FileInterceptor } from '@nestjs/platform-express';
 @ApiTags('Producto')
 @Controller('producto')
 export class ProductoController {
-  constructor(private readonly productoService: ProductoService
-  ) {}
+  constructor(private readonly productoService: ProductoService) {}
 
-@Post()
- // @Roles(Rol.ADMINISTRADOR, Rol.USUARIO)
+  @Post()
+  // @Roles(Rol.ADMINISTRADOR, Rol.USUARIO)
   @UseGuards(RolesGuard)
   @UseInterceptors(FileInterceptor('file')) // "file" es como espero la imagen
   @ApiBearerAuth()
@@ -54,7 +56,10 @@ export class ProductoController {
       throw new BadRequestException('La imagen del producto es requerida');
     }
     const imagen = await this.productoService.uploadImage(file);
-    return await this.productoService.crearProducto(crearProductoDto,imagen.url);
+    return await this.productoService.crearProducto(
+      crearProductoDto,
+      imagen.url,
+    );
   }
 
   @Get()
@@ -74,6 +79,17 @@ export class ProductoController {
     return await this.productoService.buscarIdProducto(id);
   }
 
+  @Get('nombre/:nombre')
+  @ApiOperation({ summary: 'Conseguir 1 producto por Nombre de la DB' })
+  @ApiParam({
+    name: 'nombre',
+    required: true,
+    description: 'El nombre del producto',
+  })
+  async buscarProductoPorNombre(@Param('nombre') nombre: string) {
+    return await this.productoService.buscarProductoPorNombre(nombre);
+  }
+
   @Patch(':id')
   @ApiOperation({ summary: 'Actualizar una dato del producto por ID en la DB' })
   @ApiParam({ name: 'id', required: true, description: 'El id del producto' })
@@ -82,7 +98,10 @@ export class ProductoController {
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() actualizarProductoDto: ActualizarProductoDto,
   ) {
-    return await this.productoService.actualizarIdProducto( id, actualizarProductoDto,);
+    return await this.productoService.actualizarIdProducto(
+      id,
+      actualizarProductoDto,
+    );
   }
 
   @Delete(':id')
@@ -90,5 +109,20 @@ export class ProductoController {
   @ApiParam({ name: 'id', required: true, description: 'El id del producto' })
   async eliminarIdProducto(@Param('id', new ParseUUIDPipe()) id: string) {
     return await this.productoService.eliminarIdProducto(id);
+  }
+
+  @Get('productos/:idAdministrador')
+  @ApiOperation({ summary: 'Productos segun ID de administrador' })
+  @ApiParam({
+    name: 'idAdministrador',
+    required: true,
+    description: 'El id del administrador',
+  })
+  async verProductoSegunAdministrador(
+    @Param('idAdministrador', new ParseUUIDPipe()) idAdministrador: string,
+  ) {
+    const productos =
+      await this.productoService.verProductoSegunAdministrador(idAdministrador);
+    return productos;
   }
 }

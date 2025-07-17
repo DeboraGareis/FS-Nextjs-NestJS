@@ -1,17 +1,21 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
 
 generator client {
   provider = "prisma-client-js"
 }
 
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
 
 model Administrador {
 id      String      @id @default(uuid())
@@ -19,7 +23,9 @@ nombre String
 password String
 email  String        @unique
 suspendido Boolean   @default(true)
+productos Producto[]
 }
+
 
 model Usuario {
 id      String      @id @default(uuid())
@@ -28,6 +34,7 @@ password String
 email  String        @unique
 carritos Carrito[]
 }
+
 
 model Carrito {
 id      String      @id @default(uuid())
@@ -38,6 +45,7 @@ id_usuario String
 usuario Usuario @relation(fields: [id_usuario], references: [id], onDelete: Cascade)
 }
 
+
 model Producto {
   id        String         @id @default(uuid())
   categoria String
@@ -45,10 +53,13 @@ model Producto {
   stock     Int
   imagen    String
   precio    Int
-
+  // Relación 1:n (un producto siempre tiene que tener un administrador y un administrador puede tener 0 o mas productos)
+  idAdministrador String 
+  administrador Administrador   @relation(fields: [idAdministrador], references: [id])
   // Relación 1:1 (lado sin `fields` ni `references`)
   detalle   DetalleOrden?  @relation("ProductoDetalleOrden")
 }
+
 
 model DetalleOrden {
   id          String   @id @default(uuid())
@@ -62,3 +73,15 @@ model DetalleOrden {
   // Relación 1:1 (este lado define `fields` y `references`)
   producto    Producto @relation("ProductoDetalleOrden", fields: [id_producto], references: [id], onDelete: Cascade)
 }
+
+
+model Mensajes {
+  id String @id @default(uuid())
+  idEmisor String
+  idReceptor String
+  texto String
+  fechaHora String
+  leido String
+}
+
+
