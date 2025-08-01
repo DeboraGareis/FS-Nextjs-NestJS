@@ -103,7 +103,7 @@ products:[
     "Stock": 25,
     "Imagen": "http://res.cloudinary.com/dkczleypd/image/upload/v1751490399/wvmkzdm1o81qqnz7ubri.jpg",
     "Precio": 10999.99,
-    "IdAdministrador": 1
+    "IdAdministrador": "5678"
   },
   {
     "Categoria": "Hogar",
@@ -111,30 +111,30 @@ products:[
     "Stock": 40,
     "Imagen": "http://res.cloudinary.com/dkczleypd/image/upload/v1751478951/vrhwq2doeliddlgbhxkw.jpg",
     "Precio": 299999.5,
-    "IdAdministrador": 2
+    "IdAdministrador": "5678"
   },
   {
     "Categoria": "Juguetería",
     "Nombre": "Rompecabezas 1000 piezas",
     "Stock": 15,
-    "Imagen": "https://example.com/images/rompecabezas.jpg",
+    "Imagen": "http://res.cloudinary.com/dkczleypd/image/upload/v1751478951/vrhwq2doeliddlgbhxkw.jpg",
     "Precio": 3499,
-    "IdAdministrador": 3
+    "IdAdministrador": "5678"
   },
   {
     "Categoria": "Deportes",
     "Nombre": "Pelota de fútbol profesional",
     "Stock": 10,
-    "Imagen": "https://example.com/images/pelota.jpg",
+    "Imagen": "http://res.cloudinary.com/dkczleypd/image/upload/v1751478951/vrhwq2doeliddlgbhxkw.jpg",
     "Precio": 8999,
-    "IdAdministrador": 1
+    "IdAdministrador": "5678"
   },
   {
     "Categoria": "Tecnología",
     "Nombre": "Mouse inalámbrico ergonómico",
     "Stock": 50,
-    "Imagen": "https://example.com/images/mouse.jpg",
+    "Imagen": "http://res.cloudinary.com/dkczleypd/image/upload/v1751478951/vrhwq2doeliddlgbhxkw.jpg",
     "Precio": 1999.99,
-    "IdAdministrador": 2
+    "IdAdministrador": "1212"
   }
 ]}
