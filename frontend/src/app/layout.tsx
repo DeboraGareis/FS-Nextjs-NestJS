@@ -12,7 +12,7 @@ export default function RootLayout({
       <body
       // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="bg-linear-to-t from-CFFBEE to-03D396">
+        <div className="bg-linear-to-t from-white to-emerald-100">
           <Navbar />
           <main>{children}</main>
           <Footer />
