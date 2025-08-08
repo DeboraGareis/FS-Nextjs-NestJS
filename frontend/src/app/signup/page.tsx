@@ -28,7 +28,7 @@ const Signup = () => {
       const resRegistro = await SignupService(register);
       console.log(typeof resRegistro);
       if (resRegistro.id.length > 0) {
-        router.push("/");
+        router.push("/panel");
       }
     } catch (e) {
       if (e instanceof Error) {

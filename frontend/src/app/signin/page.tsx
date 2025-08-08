@@ -26,7 +26,7 @@ const Signin = () => {
       console.log("inicio sesion", sesion);
 
       if (sesion.access_token.length > 0) {
-        router.push("/");
+        router.push("/panel");
       }
     } catch (e) {
       if (e instanceof Error) {
