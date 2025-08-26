@@ -2,33 +2,43 @@
 import Image from "next/image";
 import { Button } from "../utils/Button";
 import { useState } from "react";
-import { Login, signin } from "../service/authService";
+import { Login, Me, signin } from "../service/authService";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import { useUser } from "@/context/UserContext";
 
 const Signin = () => {
   const router = useRouter(); //para navegar manualmente.
   const [login, setLogin] = useState<Login>({ email: "", password: "" });
   const [error, setError] = useState<{ [key: string]: string[] }>({});
-
+  const { setSesion } = useAuth();
+  const { user, setUser } = useUser(); //?como hago para tomar el id del setToken???
   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setLogin({
       ...login,
       [name]: value,
     });
-    console.log("en mi vida", [name], value);
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const sesion = await signin(login);
-      console.log("inicio sesion", sesion);
+      const resServidor = await signin(login);
+      console.log("🐦 inicio sesion", resServidor);
 
-      if (sesion.access_token.length > 0) {
+      if (resServidor.access_token.length > 0) {
         router.push("/panel");
+        setSesion(true);
       }
+
+      const userId = await Me();
+      console.log("🔴🔴🔴userId:", userId.userId);
+
+      setUser(userId.userId);
     } catch (e) {
+      console.log("🔴Error signin 38: ", e);
+
       if (e instanceof Error) {
         alert(e.message);
         return;

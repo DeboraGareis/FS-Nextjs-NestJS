@@ -1,6 +1,6 @@
-'use client'; 
+"use client";
 
-import Product from "@/components/Product"; 
+import Product from "@/components/Product";
 import type { ProductType } from "@/components/Product";
 import Search from "@/components/Search";
 import Seller, { SellerType } from "@/components/Seller";
@@ -17,7 +17,7 @@ export default function Panel() {
       <div className="flex gap-4">
         <button
           className="text-emerald-600 hover:bg-emerald-100 text-2xl font-extrabold px-7 py-5"
-          onClick={() => router.push('/panel/new_product')}
+          onClick={() => router.push("/panel/new_product")}
         >
           + Nuevo producto
         </button>
@@ -35,21 +35,17 @@ export default function Panel() {
           <div className="text-emerald-600 text-2xl font-extrabold my-4 px-7 py-5">
             Otras tiendas
             <div className="gap-6 px-7 py-5">
-              
               {vendedores.map((vendedor: SellerType, index: number) => (
                 <div className="flex" key={index}>
                   <Seller seller={vendedor} />
-                  
                 </div>
               ))}
             </div>
-
-            
           </div>
 
           <div className="text-emerald-600 text-2xl font-extrabold my-4 px-7 py-5">
-            <p className= "">Otros productos</p>
-            < Search />
+            <p className="">Otros productos</p>
+            <Search />
             {/* Lista de productos */}
             <div className="flex flex-wrap border rounded-lg my-4 justify-center gap-6 px-7 py-5">
               {productos.map((producto: ProductType, index: number) => (
@@ -57,7 +53,7 @@ export default function Panel() {
               ))}
             </div>
           </div>
-        </div>      
+        </div>
       </div>
     </div>
   );

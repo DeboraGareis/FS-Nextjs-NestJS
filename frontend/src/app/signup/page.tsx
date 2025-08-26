@@ -5,9 +5,11 @@ import { useState } from "react";
 import { Register } from "../service/authService";
 import { Signup as SignupService } from "../service/authService";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 const Signup = () => {
   const router = useRouter(); //para navegar manualmente.
+  const { setValue } = useAuth();
 
   const [register, setRegister] = useState<Register>({
     nombre: "",
@@ -26,9 +28,10 @@ const Signup = () => {
 
     try {
       const resRegistro = await SignupService(register);
-      console.log(typeof resRegistro);
+      console.log(resRegistro);
       if (resRegistro.id.length > 0) {
         router.push("/panel");
+        setValue(true);
       }
     } catch (e) {
       if (e instanceof Error) {
