@@ -92,6 +92,43 @@ export class UsuarioService {
     }
   }
 
+
+   async getAllSellerList(params: { page: number; limit: number }) {
+    const { page, limit } = params;
+    const skip = (page - 1) * limit;
+
+    try {
+      const [usuarios, total] = await this.prismaService.$transaction([
+        this.prismaService.usuario.findMany({
+          skip,
+          take: limit,
+          orderBy: { nombre: 'asc' },
+          where: {
+            activo: true,   //filtro los venderores
+          },
+        }),
+        this.prismaService.usuario.count({
+          where: {
+            activo: true,   // contar solo los activos
+          },
+        }),
+      ]);
+
+      return {
+        data: usuarios,
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      };
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Error al obtener lista de vendedores',
+      );
+    }
+  }
+
+
   updateMailById(id: string, mail: string) {
     try {
       const user = this.prismaService.usuario.update({

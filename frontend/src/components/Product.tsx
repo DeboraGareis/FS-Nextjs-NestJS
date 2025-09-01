@@ -1,16 +1,19 @@
+"use client"
 import { MensajeDeAyuda, mensajeDeAyuda } from "@/app/service/mensajeService";
 import { useUser } from "@/context/UserContext";
 import Image from "next/image";
 import { useState } from "react";
 
 export type ProductType = {
-  Categoria: string;
-  Nombre: string;
-  Stock: number;
-  Imagen: string;
-  Precio: number;
-  IdAdministrador: string;
+  id:string;
+  categoria: string;
+  nombre: string;
+  stock: number;
+  imagen: string;
+  precio: number;
+  idAdministrador: string;
 };
+
 type Props = {
   producto: ProductType;
 };
@@ -45,14 +48,14 @@ export default function Product({ producto }: Props) {
     <div className="flex flex-col items-center border border-gray-300 p-2 w-48 shadow-md">
       {/* Precio */}
       <p className="text-lg font-semibold text-emerald-600 mb-2">
-        ${producto.Precio}
+        ${producto.precio}
       </p>
 
       {/* Imagen optimizada */}
       <div className="relative w-32 h-32 mb-2">
         <Image
-          src={producto.Imagen}
-          alt={producto.Nombre}
+          src={producto.imagen}
+          alt={producto.nombre}
           fill
           className="object-contain"
         />
@@ -72,7 +75,7 @@ export default function Product({ producto }: Props) {
           {" "}
           Consulta por el producto con el vendedor
         </span>
-        <p className="text-sm text-gray-700">Stock: {producto.Stock}</p>
+        <p className="text-sm text-gray-700">Stock: {producto.stock}</p>
       </div>
     </div>
   );
