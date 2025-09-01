@@ -36,7 +36,7 @@ export default function Product({ producto }: Props) {
 
       alert(`Hola, quiero saber mas del producto ${producto.nombre}`);
       mensaje.idAdministrador = user;
-      mensaje.idComprador = "9ed98a27-daa5-484e-9244-02f7c66b51a4";
+      mensaje.idComprador = producto.idAdministrador;
       mensaje.texto = `Hola, quiero saber mas del producto ${producto.nombre}`;
       mensaje.leido = "No";
 
