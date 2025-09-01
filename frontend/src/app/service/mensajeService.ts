@@ -25,12 +25,16 @@ export type MensajeDeAyudaBack = z.output<typeof MensajeDeAyudaZod>;
 export const mensajeDeAyuda = async (dato: MensajeDeAyuda) => {
   try {
     // Validación runtime
+    console.log("dato###", dato);
+
     const payload = MensajeDeAyudaZod.parse(dato);
     const res = await host.post("mensaje", payload);
     return res.data;
   } catch (error) {
     // tirar error de Zod
     if (error instanceof z.ZodError) {
+      console.log(error);
+
       console.error("ZOD: error de validacion: ", error.errors);
       throw new Error("Datos invalidos en mensaje de ayuda");
     }
@@ -47,10 +51,9 @@ export const mensajeDeAyuda = async (dato: MensajeDeAyuda) => {
 };
 
 export const ObtenerMensajes = async () => {
-  try{
+  try {
     const res = await host.get("mensaje");
     return res.data;
-
   } catch (e: any) {
     let error = "Error obtener mensajes";
     if (e?.response?.data?.message) {
@@ -59,5 +62,5 @@ export const ObtenerMensajes = async () => {
       error = e.message;
     }
     throw new Error(error);
-}
-}
+  }
+};

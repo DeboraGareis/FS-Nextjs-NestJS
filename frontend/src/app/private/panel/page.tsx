@@ -1,5 +1,5 @@
-import { ObtenerProductos } from "../service/productService";
-import { ObtenerVendedores } from "../service/userService";
+import { ObtenerProductos } from "../../service/productService";
+import { ObtenerVendedores } from "../../service/userService";
 import PanelClient from "./PanelClient";
 
 export default async function PanelPage() {

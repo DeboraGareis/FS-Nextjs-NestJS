@@ -1,40 +1,49 @@
 import host from "./api";
+import { z } from "zod";
+
 //! comunicarme por el producto con la persona que vende el mismo...
 //! preguntar por la ruta: http://localhost:3001/panel/5678 ya que la debo debe hacer el fetch para no romper..quitar el ? del div de la img
-export interface Login {
-  email: string;
-  password: string;
-}
+//validaciones del componente signin y respuesta del back
+const LoginZod = z.object({
+  email: z.email(),
+  password: z.string().min(6),
+});
+export type Login = z.infer<typeof LoginZod>;
 
-interface RespuestaSignin {
-  access_token: string;
-}
+const RespuestaSigninBackZod = z.object({
+  access_token: z.jwt(),
+});
+export type RespuestaSigninBack = z.infer<typeof RespuestaSigninBackZod>;
 
-export interface Register {
-  email: string;
-  nombre: string;
-  password: string;
-  retypePassword: string;
-}
+//validaciones del componente singup y respuesta del back
+const RegisterFrontZod = z.object({
+  email: z.email(),
+  nombre: z.string(),
+  password: z.string().min(6),
+  retypePassword: z.string().min(6),
+});
+export type Register = z.infer<typeof RegisterFrontZod>;
 
-type RegisterSolicitadaPorBack = Pick<
-  Register,
-  "email" | "nombre" | "password"
+const RegisterBackZod = RegisterFrontZod.omit({ retypePassword: true });
+export type RegisterSolicitadaPorBack = z.infer<typeof RegisterBackZod>;
+
+const RespuestaRegisterDelBackZod = z.object({
+  id: z.uuid(),
+  nombre: z.string(),
+  email: z.string(),
+});
+export type RespuestaRegisterDelBack = z.infer<
+  typeof RespuestaRegisterDelBackZod
 >;
 
-interface RespuestaSignup {
-  id: string;
-  nombre: string;
-  password: string;
-  email: string;
-}
-
+//coneccion con APIs
 export const signin = async (login: Login) => {
   try {
-    const res = await host.post<RespuestaSignin>("auth/login", login, {
+    const res = await host.post<RespuestaSigninBack>("auth/login", login, {
       withCredentials: true,
     });
-    return res.data;
+    res.data;
+    return true;
   } catch (e) {
     let error: string = "Hay un error";
     if (e?.response?.data?.message) {
@@ -56,7 +65,7 @@ export const Signup = async (register: Register) => {
   try {
     const formBack: RegisterSolicitadaPorBack = { nombre, email, password };
 
-    const res = await host.post<RespuestaSignup>("/usuario", formBack);
+    const res = await host.post<RespuestaRegisterDelBack>("/usuario", formBack);
     return res.data;
   } catch (e) {
     let error: string = "Hay un error";
@@ -79,4 +88,9 @@ export const Me = async () => {
     console.log(error);
     throw new Error();
   }
+};
+
+export const ClosedSession = async () => {
+  //hacer un metodo para cerrar la sesion y eliminar de la cookie el accesstoken
+  //tiene que hacerse desde el backend
 };

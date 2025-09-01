@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
@@ -20,8 +20,11 @@ export class AuthController {
 
   @Get('/me')
   async datosUtiles(@Req() req: Request) {
-    console.log('✡ req: ', req, '_typodato: ', typeof req, '_');
-
     return await this.authService.datosUtiles(req);
+  }
+
+  @Delete('login')
+  async cerrarSesion(@Res({ passthrough: true }) res: Response) {
+    return await this.authService.cerrarSesion(res);
   }
 }

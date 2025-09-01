@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { MensajeDeAyuda, mensajeDeAyuda } from "@/app/service/mensajeService";
 import { useAuth } from "@/context/AuthContext";
 import { useUser } from "@/context/UserContext";
@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 export type ProductType = {
-  id:string;
+  id: string;
   categoria: string;
   nombre: string;
   stock: number;
@@ -32,10 +32,12 @@ export default function Product({ producto }: Props) {
 
   const handleClick = async (event) => {
     try {
-      alert(`Hola, quiero saber mas del producto ${producto.Nombre}`);
+      console.log("user:$$$", user);
+
+      alert(`Hola, quiero saber mas del producto ${producto.nombre}`);
       mensaje.idAdministrador = user;
       mensaje.idComprador = "9ed98a27-daa5-484e-9244-02f7c66b51a4";
-      mensaje.texto = `Hola, quiero saber mas del producto ${producto.Nombre}`;
+      mensaje.texto = `Hola, quiero saber mas del producto ${producto.nombre}`;
       mensaje.leido = "No";
 
       const res = await mensajeDeAyuda(mensaje);
@@ -78,7 +80,7 @@ export default function Product({ producto }: Props) {
           onClick={handleClick}
           className="absolute block -translate-x-1.2 mt-28 p-2 text-xs text-1E4137 bg-CFFBEE rounded opacity-0 group-hover:opacity-100 transition-opacity"
         >
-          Click para comunicarse con el vendedor por {producto.Nombre}
+          Click para comunicarse con el vendedor por {producto.nombre}
         </span>
         <p className="text-sm text-gray-700">Stock: {producto.stock}</p>
       </div>

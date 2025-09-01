@@ -84,4 +84,14 @@ export class AuthService {
       throw new UnauthorizedException('Invalid token');
     }
   }
+
+  async cerrarSesion(res: Response<any, Record<string, any>>) {
+    res.clearCookie('access_token', {
+      httpOnly: true, // mantenelo seguro
+      secure: true, // recomendable si usas https
+      sameSite: 'strict', // ajustá según tu caso
+      path: '/', // mismo path que al crearla
+    });
+    return { message: 'Cookie eliminada' };
+  }
 }

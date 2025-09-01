@@ -11,8 +11,8 @@ const Signin = () => {
   const router = useRouter(); //para navegar manualmente.
   const [login, setLogin] = useState<Login>({ email: "", password: "" });
   const [error, setError] = useState<{ [key: string]: string[] }>({});
+  const { user, setUser } = useUser();
   const { setSesion } = useAuth();
-  const { user, setUser } = useUser(); //?como hago para tomar el id del setToken???
   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setLogin({
@@ -25,20 +25,18 @@ const Signin = () => {
     event.preventDefault();
     try {
       const resServidor = await signin(login);
-      console.log("🐦 inicio sesion", resServidor);
 
-      if (resServidor.access_token.length > 0) {
-        router.push("/panel");
-        setSesion(true);
+      if (!resServidor) {
+        router.push("/signin");
+        return;
       }
-
       const userId = await Me();
-      console.log("🔴🔴🔴userId:", userId.userId);
-
-      setUser(userId.userId);
+      if (userId) {
+        router.push("/private/panel");
+        setSesion(true);
+        setUser(userId.userId);
+      }
     } catch (e) {
-      console.log("🔴Error signin 38: ", e);
-
       if (e instanceof Error) {
         alert(e.message);
         return;

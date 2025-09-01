@@ -43,8 +43,8 @@ export class ProductoController {
   @Post()
   // @Roles(Rol.ADMINISTRADOR, Rol.USUARIO)
   //@UseGuards(RolesGuard)
-  @UseInterceptors(FileInterceptor('file')) // "file" es como espero la imagen
   @ApiBearerAuth()
+  @UseInterceptors(FileInterceptor('file')) // "file" es como espero la imagen
   @ApiOperation({ summary: 'Crear un producto' })
   @ApiConsumes('multipart/form-data')
   @ApiBody(CrearProductoSwaggerSchema)
@@ -121,8 +121,6 @@ export class ProductoController {
   async verProductoSegunAdministrador(
     @Param('idAdministrador', new ParseUUIDPipe()) idAdministrador: string,
   ) {
-    
-     return this.productoService.verProductoSegunAdministrador(idAdministrador);
-    
+    return this.productoService.verProductoSegunAdministrador(idAdministrador);
   }
 }

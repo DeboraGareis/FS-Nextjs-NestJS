@@ -1,4 +1,3 @@
-
 import host from "./api";
 
 export type Product = {
@@ -9,10 +8,7 @@ export type Product = {
   IdAdministrador: string;
 };
 
-export const crearProducto = async (
-  data: Product,
-  file: File
-) => {
+export const crearProducto = async (data: Product, file: File) => {
   try {
     const formData = new FormData();
     formData.append("categoria", data.Categoria);
@@ -36,17 +32,18 @@ export const crearProducto = async (
     } else if (e instanceof Error) {
       error = e.message;
     }
+    console.log("🖕 ", e);
+
     throw new Error(error);
   }
 };
 
 export const ObtenerProductos = async () => {
-try{
-    const res = await host.get("/producto",{
+  try {
+    const res = await host.get("/producto", {
       withCredentials: true,
     });
     return res.data;
-
   } catch (e: any) {
     let error = "Error obtener todos los productos ";
     if (e?.response?.data?.message) {
@@ -55,14 +52,13 @@ try{
       error = e.message;
     }
     throw new Error(error);
-}
-}
+  }
+};
 
 export const ObtenerProductosVendedor = async (adminId: string) => {
-  try{
+  try {
     const res = await host.get(`/producto/productos/${adminId}`);
     return res.data;
-
   } catch (e: any) {
     let error = "Error obtener productos del admin";
     if (e?.response?.data?.message) {
@@ -71,7 +67,5 @@ export const ObtenerProductosVendedor = async (adminId: string) => {
       error = e.message;
     }
     throw new Error(error);
-
-}
-}
-
+  }
+};

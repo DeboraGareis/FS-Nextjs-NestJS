@@ -13,19 +13,19 @@ type Props = {
 
 export default function PanelClient({ productos, vendedores }: Props) {
   const { user } = useUser();
-  console.log("user: ", user)
-  console.log("/////productos:  ",productos, "/////vendedores: ",vendedores)
+  console.log("user: ", user);
+  console.log("/////productos:  ", productos, "/////vendedores: ", vendedores);
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
       <div className="flex gap-4">
         <Link
-          href="/panel/new_product"
+          href="/private/panel/new_product"
           className="text-emerald-600 hover:bg-emerald-100 text-2xl font-extrabold px-7 py-5"
         >
           + Nuevo producto
         </Link>
         <Link
-          href={`/panel/${user}`}
+          href={`/private/panel/${user}`}
           className="bg-emerald-600 hover:bg-emerald-400 text-2xl font-extrabold text-white px-7 py-5 rounded-lg transition"
         >
           Ver mis productos
