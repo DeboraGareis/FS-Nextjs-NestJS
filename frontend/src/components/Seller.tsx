@@ -1,22 +1,28 @@
+import Link from "next/link";
 import { ProductType } from "./Product";
-import { fake_products } from "./utils/data";
 
 export type SellerType= {
-        id: string; Nombre:string; Email:string
+        id: string; nombre:string; email:string
         
 }
 type Props = {
-  seller: SellerType;
+  productos: ProductType[];
+  vendedor: SellerType;
 };
-export default function Seller({ seller }: Props){
+export default function Seller({ productos, vendedor }: Props){
   return (
     <div className="flex items-center p-4 w-48 shadow-md space-x-2">
     <p className="text-lg font-semibold text-emerald-600">
-        {seller.Nombre}
+        <Link
+          href={`/panel/${vendedor.id}`}
+         
+        >{vendedor.nombre}
+        </Link>
+        
       </p>
       <p className="text-xs font-light inline-block text-gray-600 fle"> 
         {
-          fake_products.products.filter((p: ProductType) => p.IdAdministrador === seller.id).length 
+          productos.filter((p: ProductType) => p.idAdministrador === vendedor.id).length 
         } productos
       </p>
 

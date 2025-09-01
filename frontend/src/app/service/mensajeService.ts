@@ -45,3 +45,19 @@ export const mensajeDeAyuda = async (dato: MensajeDeAyuda) => {
     throw new Error("Error inesperado al enviar mensaje de ayuda");
   }
 };
+
+export const ObtenerMensajes = async () => {
+  try{
+    const res = await host.get("mensaje");
+    return res.data;
+
+  } catch (e: any) {
+    let error = "Error obtener mensajes";
+    if (e?.response?.data?.message) {
+      error = e.response.data.message;
+    } else if (e instanceof Error) {
+      error = e.message;
+    }
+    throw new Error(error);
+}
+}

@@ -49,4 +49,15 @@ export class MensajeService {
       throw new InternalServerErrorException();
     }
   }
+
+  async listaDeMensajes() {
+    try {
+      return await this.prismaService.mensajes.findMany();
+    } catch (error) {
+      throw new InternalServerErrorException('Error al obtener los mensajes');
+    }
+  }
 }
+
+
+  

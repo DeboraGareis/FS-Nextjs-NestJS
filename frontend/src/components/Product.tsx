@@ -1,3 +1,4 @@
+"use client"
 import { MensajeDeAyuda, mensajeDeAyuda } from "@/app/service/mensajeService";
 import { useAuth } from "@/context/AuthContext";
 import { useUser } from "@/context/UserContext";
@@ -5,13 +6,15 @@ import Image from "next/image";
 import { useState } from "react";
 
 export type ProductType = {
-  Categoria: string;
-  Nombre: string;
-  Stock: number;
-  Imagen: string;
-  Precio: number;
-  IdAdministrador: string;
+  id:string;
+  categoria: string;
+  nombre: string;
+  stock: number;
+  imagen: string;
+  precio: number;
+  idAdministrador: string;
 };
+
 type Props = {
   producto: ProductType;
 };
@@ -47,14 +50,14 @@ export default function Product({ producto }: Props) {
     <div className="flex flex-col items-center border-gray-300 p-2 w-48 shadow-md">
       {/* Precio */}
       <p className="text-lg font-semibold text-emerald-600 mb-2">
-        ${producto.Precio}
+        ${producto.precio}
       </p>
 
       {/* Imagen optimizada */}
       <div className="group relative hover:w-64 hover:h-64 transition-all duration-300 w-32 h-32 mb-2">
         <Image
-          src={producto.Imagen}
-          alt={producto.Nombre}
+          src={producto.imagen}
+          alt={producto.nombre}
           fill
           className="object-contain"
         />
@@ -77,7 +80,7 @@ export default function Product({ producto }: Props) {
         >
           Click para comunicarse con el vendedor por {producto.Nombre}
         </span>
-        <p className="text-sm text-gray-700">Stock: {producto.Stock}</p>
+        <p className="text-sm text-gray-700">Stock: {producto.stock}</p>
       </div>
     </div>
   );
