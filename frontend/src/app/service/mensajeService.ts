@@ -53,6 +53,8 @@ export const mensajeDeAyuda = async (dato: MensajeDeAyuda) => {
 export const ObtenerMensajes = async () => {
   try {
     const res = await host.get("mensaje");
+    console.log("res: ", res.data);
+
     return res.data;
   } catch (e: any) {
     let error = "Error obtener mensajes";

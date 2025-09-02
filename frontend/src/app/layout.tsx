@@ -11,16 +11,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-      // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body>
         <AuthProvider>
           <div className="bg-linear-to-t from-white to-emerald-100">
-            <Navbar />
             <UserProvider>
+              <Navbar />
               <main>{children}</main>
+              <Footer />
             </UserProvider>
-            <Footer />
           </div>
         </AuthProvider>
       </body>

@@ -5,18 +5,18 @@ import { useState } from "react";
 import { Register } from "../service/authService";
 import { Signup as SignupService } from "../service/authService";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/context/AuthContext";
 
 const Signup = () => {
   const router = useRouter(); //para navegar manualmente.
-  const { setValue } = useAuth();
-
-  const [register, setRegister] = useState<Register>({
+  const [eyePassword, setEyePassword] = useState(false);
+  const [eyeRetypePassword, setEyeRetypePassword] = useState(false);
+  const inputFormRegister = {
     nombre: "",
     email: "",
     password: "",
     retypePassword: "",
-  });
+  };
+  const [register, setRegister] = useState<Register>(inputFormRegister);
 
   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -30,12 +30,13 @@ const Signup = () => {
       const resRegistro = await SignupService(register);
       console.log(resRegistro);
       if (resRegistro.id.length > 0) {
-        router.push("/panel");
-        setValue(true);
+        router.push("/signin");
       }
+      alert("Usuario creado con exito, inicie sesion");
     } catch (e) {
       if (e instanceof Error) {
         alert(e.message);
+        setRegister(inputFormRegister);
         return;
       }
     }
@@ -65,31 +66,58 @@ const Signup = () => {
             type="text"
             required
           />
-          <input
-            name="password"
-            value={register?.password}
-            onChange={handleChange}
-            className="border-1 border-black rounded-2xl mt-2 px-2 text-lg text-145B46"
-            placeholder="Contraseña"
-            id="password"
-            type="password"
-            required
-          />
-          <input
-            name="retypePassword"
-            value={register?.retypePassword}
-            onChange={handleChange}
-            className="border-1 border-black rounded-2xl mt-2 px-2 text-lg text-145B46"
-            placeholder="Reescriba su contraseña"
-            id="retypePassword"
-            type="password"
-            required
-          />
+          <div className="relative">
+            <input
+              name="password"
+              value={register?.password}
+              onChange={handleChange}
+              className="border-1 border-black rounded-2xl mt-2 px-2 text-lg text-145B46"
+              placeholder="Contraseña"
+              id="password"
+              type={eyePassword ? "text" : "password"}
+              required
+            />
+            <span
+              onClick={() => setEyePassword(!eyePassword)}
+              className="absolute right-2 top-1/2 -translate-y-2 cursor-pointer"
+            >
+              {eyePassword ? "👁" : "-👁-"}
+            </span>
+          </div>
+          <div className="relative">
+            <input
+              name="retypePassword"
+              value={register?.retypePassword}
+              onChange={handleChange}
+              className="border-1 border-black rounded-2xl mt-2 px-2 text-lg text-145B46"
+              placeholder="Reescriba su contraseña"
+              id="retypePassword"
+              type={eyeRetypePassword ? "text" : "password"}
+              required
+            />
+            <span
+              onClick={() => setEyeRetypePassword(!eyeRetypePassword)}
+              className="absolute right-2 top-1/2 -translate-y-2 cursor-pointer"
+            >
+              {eyeRetypePassword ? "👁" : "-👁-"}
+            </span>
+          </div>
           <Button
             text="Registrarse"
             green={true}
             styleButton="mt-4"
             styleSpan="text-md"
+            onClick={
+              eyePassword || eyeRetypePassword
+                ? () => {
+                    const password = setEyePassword(!eyePassword);
+                    const retyPassword = setEyeRetypePassword(
+                      !eyeRetypePassword,
+                    );
+                    return { password, retyPassword };
+                  }
+                : undefined
+            }
           />
         </div>
       </form>

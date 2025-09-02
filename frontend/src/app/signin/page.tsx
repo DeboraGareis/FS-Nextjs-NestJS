@@ -8,9 +8,9 @@ import { useAuth } from "@/context/AuthContext";
 import { useUser } from "@/context/UserContext";
 
 const Signin = () => {
-  const router = useRouter(); //para navegar manualmente.
-  const [login, setLogin] = useState<Login>({ email: "", password: "" });
-  const [error, setError] = useState<{ [key: string]: string[] }>({});
+  const router = useRouter(); //para navegar manualmente
+  const inputFormLogin = { email: "", password: "" };
+  const [login, setLogin] = useState<Login>(inputFormLogin);
   const { user, setUser } = useUser();
   const { setSesion } = useAuth();
   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,10 +39,12 @@ const Signin = () => {
     } catch (e) {
       if (e instanceof Error) {
         alert(e.message);
+        setLogin(inputFormLogin);
         return;
       }
     }
   };
+  const [eyePassword, setEyePassword] = useState(false);
 
   return (
     <div className="text-145B46 flex items-center justify-center flex-col py-20">
@@ -59,17 +61,34 @@ const Signin = () => {
             type="text"
             required
           />
-          <input
-            name="password"
-            value={login?.password}
-            onChange={handleChange}
-            className="border-1 border-black rounded-2xl mt-2 px-2 text-lg text-145B46"
-            id="contraseña"
-            placeholder="Contraseña"
-            type="password"
-            required
+          <div className="relative">
+            <input
+              name="password"
+              value={login?.password}
+              onChange={handleChange}
+              className="border-1 border-black rounded-2xl mt-2 px-2 text-lg text-145B4 select-none"
+              id="contraseña"
+              placeholder="Contraseña"
+              type={eyePassword ? "text" : "password"}
+              required
+            />
+            <span
+              className="absolute right-2 top-1/2 -translate-y-2 cursor-pointer"
+              onClick={() => {
+                setEyePassword(!eyePassword);
+              }}
+            >
+              {eyePassword ? "👁" : "-👁-"}
+            </span>
+          </div>
+          <Button
+            text="Iniciar"
+            styleButton="mt-4"
+            styleSpan="text-md"
+            onClick={
+              eyePassword ? () => setEyePassword(!eyePassword) : undefined
+            }
           />
-          <Button text="Iniciar" styleButton="mt-4" styleSpan="text-md" />
         </div>
       </form>
       {/* Iniciar con google*/}

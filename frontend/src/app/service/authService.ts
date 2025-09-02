@@ -1,7 +1,7 @@
+import axios from "axios";
 import host from "./api";
 import { z } from "zod";
 
-//! comunicarme por el producto con la persona que vende el mismo...
 //! preguntar por la ruta: http://localhost:3001/panel/5678 ya que la debo debe hacer el fetch para no romper..quitar el ? del div de la img
 //validaciones del componente signin y respuesta del back
 const LoginZod = z.object({
@@ -84,13 +84,29 @@ export const Me = async () => {
   try {
     const res = await host.get("/auth/me", { withCredentials: true });
     return res.data;
-  } catch (error) {
-    console.log(error);
-    throw new Error();
+  } catch (e) {
+    let error: string = "Hay un error";
+    if (e?.response?.data?.message) {
+      console.log("e?.response?.data: ", e?.response?.data);
+      error = e.response.data.message;
+    } else if (e instanceof Error) {
+      console.log("e.message: ", e.message);
+      error = e.message;
+    }
+    throw new Error(`Error = ${error}`);
   }
 };
 
 export const ClosedSession = async () => {
-  //hacer un metodo para cerrar la sesion y eliminar de la cookie el accesstoken
-  //tiene que hacerse desde el backend
+  try {
+    const closedSession = await host.delete("/auth/login");
+    return closedSession;
+  } catch (e) {
+    if (e?.response?.data?.message) {
+      e.response.data.message;
+    } else if (e instanceof Error) {
+      e.message;
+    }
+    throw new Error();
+  }
 };
