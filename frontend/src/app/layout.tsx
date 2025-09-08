@@ -10,7 +10,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body>
         <AuthProvider>
           <div className="bg-linear-to-t from-white to-emerald-100">

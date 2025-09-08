@@ -51,10 +51,11 @@ export const mensajeDeAyuda = async (dato: MensajeDeAyuda) => {
 };
 
 export const ObtenerMensajes = async () => {
+  //?mostrar solo loe mensajes que envio y recibio el cliente,
+  //? hacer un metodo en el backend qque filtre con el id del emisor
+  //? y el id de receptor
   try {
     const res = await host.get("mensaje");
-    console.log("res: ", res.data);
-
     return res.data;
   } catch (e: any) {
     let error = "Error obtener mensajes";
