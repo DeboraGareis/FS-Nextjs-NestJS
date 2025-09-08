@@ -34,8 +34,19 @@ export class MensajeService {
     try {
       const mensaje = await this.prismaService.mensajes.findMany({
         where: {
-          idEmisor: { in: [idEmisor] },
-          idReceptor: { in: [idReceptor] },
+          OR: [
+            {
+              idEmisor: { in: [idEmisor] },
+              idReceptor: { in: [idReceptor] },
+            },
+            {
+              idEmisor: { in: [idReceptor] },
+              idReceptor: { in: [idEmisor] },
+            },
+          ],
+        },
+        orderBy: {
+          fechaHora: 'asc',
         },
       });
       if (mensaje.length === 0) {
@@ -58,6 +69,3 @@ export class MensajeService {
     }
   }
 }
-
-
-  

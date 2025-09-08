@@ -31,11 +31,9 @@ export class MensajeController {
       idReceptor,
     );
   }
-  
+
   @Get()
   async listaDeMensajes() {
     return await this.mensajeService.listaDeMensajes();
   }
 }
-
-  
