@@ -54,9 +54,11 @@ export default function Product({ producto }: Props) {
       <p className="text-lg font-semibold text-emerald-600 mb-2">
         ${producto.precio}
       </p>
-
+      <p className="text-sm font-semibold text-emerald-600 mb-2">
+        {producto.nombre}
+      </p>
       {/* Imagen optimizada */}
-      <div className="group relative hover:w-64 hover:h-64 transition-all duration-300 w-32 h-32 mb-2">
+      <div className="group relative hover:w-40 hover:h-40 transition-all duration-300 w-32 h-32 mb-2">
         <Image
           src={producto.imagen}
           alt={producto.nombre}

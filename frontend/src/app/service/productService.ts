@@ -55,17 +55,17 @@ export const ObtenerProductos = async () => {
   }
 };
 
+
 export const ObtenerProductosVendedor = async (adminId: string) => {
   try {
     const res = await host.get(`/producto/productos/${adminId}`);
     return res.data;
   } catch (e: any) {
-    let error = "Error obtener productos del admin";
-    if (e?.response?.data?.message) {
-      error = e.response.data.message;
-    } else if (e instanceof Error) {
-      error = e.message;
-    }
-    throw new Error(error);
+  if (e?.response?.status === 404) {
+    console.warn("No hay productos para este vendedor");
+    return [];
   }
+  console.error("Fallo al obtener productos:", e.message);
+  return [];
+}
 };

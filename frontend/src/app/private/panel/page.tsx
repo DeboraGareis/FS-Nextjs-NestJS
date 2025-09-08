@@ -7,3 +7,5 @@ export default async function PanelPage() {
   const vendedores = await ObtenerVendedores();
   return <PanelClient productos={productos} vendedores={vendedores} />;
 }
+
+

@@ -1,4 +1,5 @@
 
+import { UserType } from "../private/panel/PanelClient";
 import host from "./api";
 
 export const ObtenerUsuarios = async () => {
@@ -36,3 +37,17 @@ try{
     throw new Error(error);
 }
 }
+
+export const ObtenerUserPorId = async (id: string): Promise<UserType | null> => {
+  try {
+    const res = await host.get(`/usuario/${id}`);
+    return res.data;
+  } catch (e: any) {
+    if (e?.response?.status === 404) {
+      console.warn("No se encontro el usuario");
+    } else {
+      console.error("Fallo al obtener usuario:", e.message);
+    }
+    return null;
+  }
+};

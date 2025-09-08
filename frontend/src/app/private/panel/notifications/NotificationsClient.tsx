@@ -3,6 +3,7 @@
 import BottonPanel from "@/components/BottonPanel";
 import { useUser } from "@/context/UserContext";
 import Link from "next/link";
+import { UserType } from "../PanelClient";
 
 export type MessagesType = {
   id: string;
@@ -13,13 +14,7 @@ export type MessagesType = {
   leido: string;
 };
 
-export type UserType = {
-  id: string;
-  nombre: string;
-  password: string;
-  email: string;
-  activo: boolean;
-};
+
 
 type Props = {
   messages: MessagesType[];
