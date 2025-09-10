@@ -17,10 +17,10 @@ export type ProductType = {
 
 type Props = {
   producto: ProductType;
+  vendedor?: boolean; //* si el componente es para el vendedor le quita la forma de comunicarse con el cliente.
 };
 
-export default function Product({ producto }: Props) {
-  //state del metodo /me del backend// quiero manejar mejor la sesion del usuario, para que se mantenga, porque cuando hay un cambio se corta, me muestra vistas que no deberia
+export default function Product({ producto, vendedor }: Props) {
   const { user } = useUser();
 
   const [mensaje] = useState<MensajeDeAyuda>({
@@ -32,8 +32,6 @@ export default function Product({ producto }: Props) {
 
   const handleClick = async (event) => {
     try {
-      console.log("user:$$$", user);
-
       alert(`Hola, quiero saber mas del producto ${producto.nombre}`);
       mensaje.idAdministrador = user;
       mensaje.idComprador = producto.idAdministrador;
@@ -69,21 +67,25 @@ export default function Product({ producto }: Props) {
 
       {/* Botón de ayuda + cantidad */}
       <div className="relative group flex items-center gap-2">
-        <button
-          role="img"
-          aria-label="info"
-          className="text-xl bg-gray-200 rounded-full w-7 h-7 flex items-center justify-center hover:bg-gray-300 motion-safe:hover:scale-120"
-          onClick={handleClick}
-        >
-          ?
-        </button>
+        {vendedor ? null : (
+          <>
+            <button
+              role="img"
+              aria-label="info"
+              className="text-xl bg-gray-200 rounded-full w-7 h-7 flex items-center justify-center hover:bg-gray-300 motion-safe:hover:scale-120"
+              onClick={handleClick}
+            >
+              ?
+            </button>
+            <span
+              onClick={handleClick}
+              className="absolute block -translate-x-1.2 mt-28 p-2 text-xs text-1E4137 bg-CFFBEE rounded opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              Click para comunicarse con el vendedor por {producto.nombre}
+            </span>
+          </>
+        )}
 
-        <span
-          onClick={handleClick}
-          className="absolute block -translate-x-1.2 mt-28 p-2 text-xs text-1E4137 bg-CFFBEE rounded opacity-0 group-hover:opacity-100 transition-opacity"
-        >
-          Click para comunicarse con el vendedor por {producto.nombre}
-        </span>
         <p className="text-sm text-gray-700">Stock: {producto.stock}</p>
       </div>
     </div>
