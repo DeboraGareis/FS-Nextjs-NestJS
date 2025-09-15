@@ -1,14 +1,12 @@
-
 import { UserType } from "../private/panel/PanelClient";
 import host from "./api";
 
 export const ObtenerUsuarios = async () => {
-try{
-    const res = await host.get("/usuario",{
+  try {
+    const res = await host.get("/usuario", {
       withCredentials: true,
     });
     return res.data.data;
-
   } catch (e: any) {
     let error = "Error obtener todos los usuarios ";
     if (e?.response?.data?.message) {
@@ -17,16 +15,15 @@ try{
       error = e.message;
     }
     throw new Error(error);
-}
-}
+  }
+};
 
 export const ObtenerVendedores = async () => {
-try{
-    const res = await host.get("/usuario/sellers",{
+  try {
+    const res = await host.get("/usuario/sellers", {
       withCredentials: true,
     });
     return res.data.data;
-
   } catch (e: any) {
     let error = "Error obtener todos los vendedores ";
     if (e?.response?.data?.message) {
@@ -35,10 +32,12 @@ try{
       error = e.message;
     }
     throw new Error(error);
-}
-}
+  }
+};
 
-export const ObtenerUserPorId = async (id: string): Promise<UserType | null> => {
+export const ObtenerUserPorId = async (
+  id: string,
+): Promise<UserType | null> => {
   try {
     const res = await host.get(`/usuario/${id}`);
     return res.data;

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ProductType } from "./Product";
+import VendedorClient from "@/app/private/panel/[id_vendedor]/VendedorClient";
 
 export type SellerType = {
   id: string;
@@ -9,8 +10,9 @@ export type SellerType = {
 type Props = {
   productos: ProductType[];
   vendedor: SellerType;
+  vistaVendedor?: boolean;
 };
-export default function Seller({ productos, vendedor }: Props) {
+export default function Seller({ productos, vendedor, vistaVendedor }: Props) {
   return (
     <div className="flex items-center p-4 w-48 shadow-md space-x-2">
       <p className="text-lg font-semibold text-emerald-600">

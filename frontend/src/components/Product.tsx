@@ -1,6 +1,5 @@
 "use client";
 import { MensajeDeAyuda, mensajeDeAyuda } from "@/app/service/mensajeService";
-import { useAuth } from "@/context/AuthContext";
 import { useUser } from "@/context/UserContext";
 import Image from "next/image";
 import { useState } from "react";
@@ -17,10 +16,10 @@ export type ProductType = {
 
 type Props = {
   producto: ProductType;
-  vendedor?: boolean; //* si el componente es para el vendedor le quita la forma de comunicarse con el cliente.
+  vistaVendedor?: boolean; //* si el componente es para el vendedor le quita la forma de comunicarse con el cliente.
 };
 
-export default function Product({ producto, vendedor }: Props) {
+export default function Product({ producto, vistaVendedor }: Props) {
   const { user } = useUser();
 
   const [mensaje] = useState<MensajeDeAyuda>({
@@ -67,7 +66,7 @@ export default function Product({ producto, vendedor }: Props) {
 
       {/* Botón de ayuda + cantidad */}
       <div className="relative group flex items-center gap-2">
-        {vendedor ? null : (
+        {vistaVendedor ? null : (
           <>
             <button
               role="img"

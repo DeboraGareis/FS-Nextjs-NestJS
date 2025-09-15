@@ -14,8 +14,6 @@ export type MessagesType = {
   leido: string;
 };
 
-
-
 type Props = {
   messages: MessagesType[];
   users: UserType[];

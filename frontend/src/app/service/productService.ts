@@ -55,17 +55,18 @@ export const ObtenerProductos = async () => {
   }
 };
 
-
+//el administrador tambien puede ser cliente, si quiere usar
+//la vista de cliente?
 export const ObtenerProductosVendedor = async (adminId: string) => {
   try {
     const res = await host.get(`/producto/productos/${adminId}`);
     return res.data;
   } catch (e: any) {
-  if (e?.response?.status === 404) {
-    console.warn("No hay productos para este vendedor");
+    if (e?.response?.status === 404) {
+      console.warn("No hay productos para este vendedor");
+      return [];
+    }
+    console.error("Fallo al obtener productos:", e.message);
     return [];
   }
-  console.error("Fallo al obtener productos:", e.message);
-  return [];
-}
 };

@@ -30,7 +30,8 @@ export default function PanelClient({ productos, vendedores }: Props) {
     email: "",
     activo: false,
   });
-   const [productosFiltrados, setProductosFiltrados] = useState<ProductType[]>(productos);
+  const [productosFiltrados, setProductosFiltrados] =
+    useState<ProductType[]>(productos);
   useEffect(() => {
     const DataUser = async () => {
       if (user) {
@@ -42,11 +43,12 @@ export default function PanelClient({ productos, vendedores }: Props) {
   }, [user]);
 
   console.log("user: ", user, "//activo o no:", rtaUser.activo);
+  console.log("💟 productos: ", productos);
+
   console.log("/////productos:  ", productos, "/////vendedores: ", vendedores);
 
   return (
     <div className="flex flex-col min-h-screen items-center justify-start p-8 pb-10 gap-10 sm:p-10">
-      
       {/* Botones solo para vendedores */}
       {rtaUser.activo && (
         <div className="flex gap-4">
@@ -73,7 +75,11 @@ export default function PanelClient({ productos, vendedores }: Props) {
             <div className="gap-6 px-7 py-5">
               {vendedores.map((v, i) => (
                 <div className="flex" key={i}>
-                  <Seller vendedor={v} productos={productos} />
+                  <Seller
+                    vendedor={v}
+                    productos={productos}
+                    vistaVendedor={rtaUser.activo}
+                  />
                 </div>
               ))}
             </div>
@@ -92,7 +98,9 @@ export default function PanelClient({ productos, vendedores }: Props) {
                   <Product key={i} producto={p} />
                 ))
               ) : (
-                <p className="text-gray-500 text-sm">No se encontraron productos</p>
+                <p className="text-gray-500 text-sm">
+                  No se encontraron productos
+                </p>
               )}
             </div>
           </div>

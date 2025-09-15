@@ -2,15 +2,26 @@
 import BottonPanel from "@/components/BottonPanel";
 import Product, { ProductType } from "@/components/Product";
 import Search from "@/components/Search";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Props = {
   productos: ProductType[];
+  idVendedor: string;
 };
 
-export default function VendedorClient({ productos }: Props) {
+export default function VendedorClient({ productos, idVendedor }: Props) {
   const [productosFiltrados, setProductosFiltrados] =
     useState<ProductType[]>(productos);
+
+  useEffect(() => {
+    const productosActualizados = productosFiltrados.map((producto) => ({
+      ...producto,
+      idAdministrador: idVendedor,
+    }));
+    setProductosFiltrados(productosActualizados);
+  }, [productos, idVendedor]);
+
+  console.log("🙂 productosActualizados: ", productosFiltrados);
   return (
     <div>
       <div className="text-emerald-600 text-2xl font-extrabold my-4 px-7 py-5">
@@ -23,7 +34,7 @@ export default function VendedorClient({ productos }: Props) {
         <div className="flex flex-wrap border rounded-lg my-4 justify-center gap-6 px-7 py-5">
           {productosFiltrados.length > 0 ? (
             productosFiltrados.map((p, i) => (
-              <Product key={i} producto={p} vendedor={true} />
+              <Product key={i} producto={p} vistaVendedor={false} />
             ))
           ) : (
             <p className="text-gray-500 text-sm">
