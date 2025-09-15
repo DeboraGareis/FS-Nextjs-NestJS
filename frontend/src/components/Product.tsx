@@ -4,6 +4,7 @@ import { useUser } from "@/context/UserContext";
 import Image from "next/image";
 import { useState } from "react";
 
+
 export type ProductType = {
   id: string;
   categoria: string;
@@ -14,13 +15,16 @@ export type ProductType = {
   idAdministrador: string;
 };
 
+
 type Props = {
   producto: ProductType;
  
 };
 
+
 export default function Product({ producto }: Props) {
   const { user } = useUser();
+
 
   const [mensaje] = useState<MensajeDeAyuda>({
     idAdministrador: "",
@@ -28,6 +32,7 @@ export default function Product({ producto }: Props) {
     texto: "",
     leido: "",
   });
+
 
   const handleClick = async (event) => {
     try {
@@ -37,6 +42,7 @@ export default function Product({ producto }: Props) {
       mensaje.texto = `Hola, quiero saber mas del producto ${producto.nombre}`;
       mensaje.leido = "No";
 
+
       const res = await mensajeDeAyuda(mensaje);
       alert("mensaje enviado");
     } catch (error) {
@@ -44,6 +50,7 @@ export default function Product({ producto }: Props) {
       alert(error.message);
     }
   };
+
 
   return (
     <div className="flex flex-col items-center border-gray-300 p-2 w-48 shadow-md">
@@ -63,6 +70,7 @@ export default function Product({ producto }: Props) {
           className="object-contain"
         />
       </div>
+
 
       {/* Botón de ayuda + cantidad */}
   {producto.idAdministrador!=user && (
@@ -86,3 +94,9 @@ export default function Product({ producto }: Props) {
     </div>
   );
 }
+
+
+
+
+
+
