@@ -78,7 +78,7 @@ export default function PanelClient({ productos, vendedores }: Props) {
                   <Seller
                     vendedor={v}
                     productos={productos}
-                    vistaVendedor={rtaUser.activo}
+                   //vistaVendedor={rtaUser.activo}
                   />
                 </div>
               ))}

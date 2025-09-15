@@ -10,9 +10,9 @@ export type SellerType = {
 type Props = {
   productos: ProductType[];
   vendedor: SellerType;
-  vistaVendedor?: boolean;
+  //vistaVendedor?: boolean;
 };
-export default function Seller({ productos, vendedor, vistaVendedor }: Props) {
+export default function Seller({ productos, vendedor}: Props) {
   return (
     <div className="flex items-center p-4 w-48 shadow-md space-x-2">
       <p className="text-lg font-semibold text-emerald-600">

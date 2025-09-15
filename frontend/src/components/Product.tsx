@@ -16,10 +16,10 @@ export type ProductType = {
 
 type Props = {
   producto: ProductType;
-  vistaVendedor?: boolean; //* si el componente es para el vendedor le quita la forma de comunicarse con el cliente.
+ 
 };
 
-export default function Product({ producto, vistaVendedor }: Props) {
+export default function Product({ producto }: Props) {
   const { user } = useUser();
 
   const [mensaje] = useState<MensajeDeAyuda>({
@@ -65,28 +65,24 @@ export default function Product({ producto, vistaVendedor }: Props) {
       </div>
 
       {/* Botón de ayuda + cantidad */}
-      <div className="relative group flex items-center gap-2">
-        {vistaVendedor ? null : (
-          <>
-            <button
-              role="img"
-              aria-label="info"
-              className="text-xl bg-gray-200 rounded-full w-7 h-7 flex items-center justify-center hover:bg-gray-300 motion-safe:hover:scale-120"
-              onClick={handleClick}
-            >
-              ?
-            </button>
-            <span
-              onClick={handleClick}
-              className="absolute block -translate-x-1.2 mt-28 p-2 text-xs text-1E4137 bg-CFFBEE rounded opacity-0 group-hover:opacity-100 transition-opacity"
-            >
-              Click para comunicarse con el vendedor por {producto.nombre}
-            </span>
-          </>
-        )}
-
-        <p className="text-sm text-gray-700">Stock: {producto.stock}</p>
-      </div>
+  {producto.idAdministrador!=user && (
+  <>
+    <button
+      role="img"
+      aria-label="info"
+      className="text-xl bg-gray-200 rounded-full w-7 h-7 flex items-center justify-center hover:bg-gray-300 motion-safe:hover:scale-120"
+      onClick={handleClick}
+    >
+      ?
+    </button>
+    <span
+      onClick={handleClick}
+      className="absolute block -translate-x-1.2 mt-28 p-2 text-xs text-1E4137 bg-CFFBEE rounded opacity-0 group-hover:opacity-100 transition-opacity"
+    >
+      Click para comunicarse con el vendedor por {producto.nombre}
+    </span>
+  </>
+)}
     </div>
   );
 }

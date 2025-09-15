@@ -34,7 +34,7 @@ export default function VendedorClient({ productos, idVendedor }: Props) {
         <div className="flex flex-wrap border rounded-lg my-4 justify-center gap-6 px-7 py-5">
           {productosFiltrados.length > 0 ? (
             productosFiltrados.map((p, i) => (
-              <Product key={i} producto={p} vistaVendedor={false} />
+              <Product key={i} producto={p} />
             ))
           ) : (
             <p className="text-gray-500 text-sm">
