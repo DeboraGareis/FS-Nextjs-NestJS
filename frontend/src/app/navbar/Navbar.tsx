@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { useAuth } from "@/context/AuthContext";
 import { ClosedSession, Me } from "../service/authService";
@@ -12,9 +12,10 @@ const Navbar = () => {
   const router = useRouter();
   const { setUser } = useUser();
   const { sesion, setSesion } = useAuth();
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    let isMounted = true;
+    setIsMounted(true);
 
     const buscarUsuario = async () => {
       try {

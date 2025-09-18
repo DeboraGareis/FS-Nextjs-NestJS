@@ -1,4 +1,4 @@
-import { ObtenerMensajes } from "@/app/service/mensajeService";
+//import { ObtenerMensajes } from "@/app/service/mensajeService";
 import ChatClient from "./ChatClient";
 
 type Props = {
@@ -9,7 +9,7 @@ export default async function NotificationsPage({
 }: {
   params: { chat: string };
 }) {
-  const messages = await ObtenerMensajes();
+  //const messages = await ObtenerMensajes();
   const { chat } = await params;
-  return <ChatClient messages={messages} chat={chat} />;
+  return <ChatClient  chat={chat} />;
 }

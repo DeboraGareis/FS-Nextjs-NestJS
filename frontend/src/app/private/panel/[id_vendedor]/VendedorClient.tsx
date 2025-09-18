@@ -6,20 +6,20 @@ import { useEffect, useState } from "react";
 
 type Props = {
   productos: ProductType[];
-  idVendedor: string;
+  id_vendedor: string;
 };
 
-export default function VendedorClient({ productos, idVendedor }: Props) {
+export default function VendedorClient({ productos, id_vendedor }: Props) {
   const [productosFiltrados, setProductosFiltrados] =
     useState<ProductType[]>(productos);
 
   useEffect(() => {
-    const productosActualizados = productosFiltrados.map((producto) => ({
+    const productosActualizados = productos.map((producto) => ({
       ...producto,
-      idAdministrador: idVendedor,
+      idAdministrador: id_vendedor,
     }));
     setProductosFiltrados(productosActualizados);
-  }, [productos, idVendedor]);
+  }, [productos, id_vendedor]);
 
   console.log("🙂 productosActualizados: ", productosFiltrados);
   return (
