@@ -1,15 +1,14 @@
 "use client";
 import { useUser } from "@/context/UserContext";
 import { useEffect, useMemo, useState } from "react";
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 import { MessagesType } from "../NotificationsClient";
 import BottonPanel from "@/components/BottonPanel";
 
 type Props = {
   chat: string;
-  messages: MessagesType[];
 };
-
+type socketType=null|Socket;
 export default function ChatClient({ chat }: Props) {
   const hostServer = "http://localhost:3000";
   const { user } = useUser();
@@ -23,7 +22,7 @@ export default function ChatClient({ chat }: Props) {
   };
 
   // ---------- Todos los hooks al inicio ----------
-  const [socket, setSocket] = useState<any>(null);
+  const [socket, setSocket] = useState<socketType>(null);
   const [mensaje, setMensaje] = useState(contenidoMensaje);
   const [mensajesServer, setMensajesServer] = useState<MessagesType[]>([]);
   const [isClient, setIsClient] = useState(false);
