@@ -1,0 +1,103 @@
+"use client";
+import Image from "next/image";
+import { Button } from "../utils/Button";
+import { useState } from "react";
+import { Login, Me, signin } from "../service/authService";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import { useUser } from "@/context/UserContext";
+
+const Signin = () => {
+  const router = useRouter(); //para navegar manualmente
+  const inputFormLogin = { email: "", password: "" };
+  const [login, setLogin] = useState<Login>(inputFormLogin);
+  const { setUser } = useUser();
+  const { setSesion } = useAuth();
+  const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setLogin({
+      ...login,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    try {
+      const resServidor = await signin(login);
+
+      if (!resServidor) {
+        router.push("/signin");
+        return;
+      }
+      const userId = await Me();
+      if (userId) {
+        router.push("/private/panel");
+        setSesion(true);
+        setUser(userId.userId);
+      }
+    } catch (e) {
+      if (e instanceof Error) {
+        alert(e.message);
+        setLogin(inputFormLogin);
+        return;
+      }
+    }
+  };
+  const [eyePassword, setEyePassword] = useState(false);
+
+  return (
+    <div className="text-145B46 flex items-center justify-center flex-col py-20">
+      <h2 className="text-lg font-semibold">Iniciar sesión</h2>
+      <form action="#" onSubmit={handleSubmit}>
+        <div className="flex flex-col">
+          <input
+            name="email"
+            value={login?.email}
+            onChange={handleChange}
+            className="border-1 border-black rounded-2xl mt-6 px-2 text-lg text-145B46"
+            placeholder="Usuario"
+            id="usuario"
+            type="text"
+            required
+          />
+          <div className="relative">
+            <input
+              name="password"
+              value={login?.password}
+              onChange={handleChange}
+              className="border-1 border-black rounded-2xl mt-2 px-2 text-lg text-145B4 select-none"
+              id="contraseña"
+              placeholder="Contraseña"
+              type={eyePassword ? "text" : "password"}
+              required
+            />
+            <span
+              className="absolute right-2 top-1/2 -translate-y-2 cursor-pointer"
+              onClick={() => {
+                setEyePassword(!eyePassword);
+              }}
+            >
+              {eyePassword ? "👁" : "-👁-"}
+            </span>
+          </div>
+          <Button
+            text="Iniciar"
+            styleButton="mt-4"
+            styleSpan="text-md"
+            onClick={
+              eyePassword ? () => setEyePassword(!eyePassword) : undefined
+            }
+          />
+        </div>
+      </form>
+      {/* Iniciar con google*/}
+      <div className="flex mt-2">
+        <Image src="/S.png" alt="google" height={36} width={36} />
+      </div>
+      <span className="text-sm">Ya tienes una cuenta?</span>
+      <span className="text-sm">Has click aquí para iniciar sesión</span>
+    </div>
+  );
+};
+export default Signin;

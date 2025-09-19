@@ -33,8 +33,8 @@ import { Rol } from 'src/guard/enum';
 import { Roles } from 'src/decoradores/roles.decorador';
 import { FileInterceptor } from '@nestjs/platform-express';
 
-@ApiBearerAuth()
-@UseGuards(AutenticadorGuard)
+//@ApiBearerAuth()
+//@UseGuards(AutenticadorGuard)
 @ApiTags('Producto')
 @Controller('producto')
 export class ProductoController {
@@ -42,9 +42,9 @@ export class ProductoController {
 
   @Post()
   // @Roles(Rol.ADMINISTRADOR, Rol.USUARIO)
-  @UseGuards(RolesGuard)
-  @UseInterceptors(FileInterceptor('file')) // "file" es como espero la imagen
+  //@UseGuards(RolesGuard)
   @ApiBearerAuth()
+  @UseInterceptors(FileInterceptor('file')) // "file" es como espero la imagen
   @ApiOperation({ summary: 'Crear un producto' })
   @ApiConsumes('multipart/form-data')
   @ApiBody(CrearProductoSwaggerSchema)
@@ -121,8 +121,6 @@ export class ProductoController {
   async verProductoSegunAdministrador(
     @Param('idAdministrador', new ParseUUIDPipe()) idAdministrador: string,
   ) {
-    const productos =
-      await this.productoService.verProductoSegunAdministrador(idAdministrador);
-    return productos;
+    return this.productoService.verProductoSegunAdministrador(idAdministrador);
   }
 }

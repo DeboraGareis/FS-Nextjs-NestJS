@@ -23,7 +23,7 @@ nombre String
 password String
 email  String        @unique
 suspendido Boolean   @default(true)
-productos Producto[]
+//productos Producto[]
 }
 
 
@@ -32,7 +32,9 @@ id      String      @id @default(uuid())
 nombre String
 password String
 email  String        @unique
+activo  Boolean  @default(false)
 carritos Carrito[]
+productos Producto[]
 }
 
 
@@ -55,7 +57,7 @@ model Producto {
   precio    Int
   // Relación 1:n (un producto siempre tiene que tener un administrador y un administrador puede tener 0 o mas productos)
   idAdministrador String 
-  administrador Administrador   @relation(fields: [idAdministrador], references: [id])
+  usuario Usuario   @relation(fields: [idAdministrador], references: [id])
   // Relación 1:1 (lado sin `fields` ni `references`)
   detalle   DetalleOrden?  @relation("ProductoDetalleOrden")
 }
