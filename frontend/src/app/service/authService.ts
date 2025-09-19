@@ -1,8 +1,6 @@
 import host from "./api";
 import { z } from "zod";
 
-//! preguntar por la ruta: http://localhost:3001/panel/5678 ya que la debo debe hacer el fetch para no romper..quitar el ? del div de la img
-//validaciones del componente signin y respuesta del back
 const LoginZod = z.object({
   email: z.email(),
   password: z.string().min(6),
@@ -21,6 +19,7 @@ const RegisterFrontZod = z.object({
   password: z.string().min(6),
   retypePassword: z.string().min(6),
 });
+// eslint-disable-next-line
 export type Register = z.infer<typeof RegisterFrontZod>;
 
 const RegisterBackZod = RegisterFrontZod.omit({ retypePassword: true });
@@ -41,10 +40,11 @@ export const signin = async (login: Login) => {
     const res = await host.post<RespuestaSigninBack>("auth/login", login, {
       withCredentials: true,
     });
-    res.data;
+    // res.data;
     return true;
-  } catch (e) {
+  } catch (e: any) {
     let error: string = "Hay un error";
+
     if (e?.response?.data?.message) {
       console.log("e?.response?.data: ", e?.response?.data);
       error = e.response.data.message;
@@ -66,7 +66,7 @@ export const Signup = async (register: Register) => {
 
     const res = await host.post<RespuestaRegisterDelBack>("/usuario", formBack);
     return res.data;
-  } catch (e) {
+  } catch (e: any) {
     let error: string = "Hay un error";
     if (e?.response?.data?.message) {
       console.log("e?.response?.data: ", e?.response?.data);
@@ -83,7 +83,7 @@ export const Me = async () => {
   try {
     const res = await host.get("/auth/me", { withCredentials: true });
     return res.data;
-  } catch (e) {
+  } catch (e: any) {
     let error: string = "Hay un error";
     if (e?.response?.data?.message) {
       console.log("e?.response?.data: ", e?.response?.data);
@@ -100,7 +100,7 @@ export const ClosedSession = async () => {
   try {
     const closedSession = await host.delete("/auth/login");
     return closedSession;
-  } catch (e) {
+  } catch (e: any) {
     if (e?.response?.data?.message) {
       e.response.data.message;
     } else if (e instanceof Error) {

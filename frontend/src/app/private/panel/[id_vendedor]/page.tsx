@@ -10,5 +10,9 @@ export default async function ProductosVendedor({
   console.log("params.id_vendedor:", id_vendedor);
 
   const productos = await ObtenerProductosVendedor(id_vendedor);
-  return <VendedorClient productos={productos} id_vendedor={id_vendedor} />;
+  return (
+    <>
+      <VendedorClient productos={productos} id_vendedor={id_vendedor} />
+    </>
+  );
 }

@@ -28,11 +28,12 @@ const Navbar = () => {
           setSesion(true);
         }
       } catch (error) {
+        console.error(error);
         router.push("/signin");
       }
     };
     buscarUsuario();
-  }, []);
+  }, [setSesion, setUser, isMounted, router]);
 
   return (
     <nav className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full h-18 bg-white shadow flex items-center justify-between">
