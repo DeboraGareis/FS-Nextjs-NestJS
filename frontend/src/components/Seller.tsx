@@ -1,7 +1,5 @@
 import Link from "next/link";
 import { ProductType } from "./Product";
-import VendedorClient from "@/app/private/panel/[id_vendedor]/VendedorClient";
-
 export type SellerType = {
   id: string;
   nombre: string;

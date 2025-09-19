@@ -34,7 +34,7 @@ export default function Product({ producto }: Props) {
   });
 
 
-  const handleClick = async (event) => {
+  const handleClick = async () => {
     try {
       alert(`Hola, quiero saber mas del producto ${producto.nombre}`);
       mensaje.idAdministrador = user;
@@ -43,7 +43,7 @@ export default function Product({ producto }: Props) {
       mensaje.leido = "No";
 
 
-      const res = await mensajeDeAyuda(mensaje);
+      await mensajeDeAyuda(mensaje);
       alert("mensaje enviado");
     } catch (error) {
       console.error("Error en handleClick:", error);

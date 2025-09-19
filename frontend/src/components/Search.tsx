@@ -20,7 +20,7 @@ export default function Search({ productos, onResults }: Props) {
       p.nombre.toLowerCase().includes(query.toLowerCase())
     );
     onResults(resultados);
-  }, [query, productos]);
+  }, [query, productos, onResults]);
 
   return (
     <div className="flex text-sm items-center gap-2 w-full max-w-md">
