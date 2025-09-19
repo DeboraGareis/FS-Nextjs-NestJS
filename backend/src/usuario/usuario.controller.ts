@@ -29,8 +29,8 @@ export class UsuarioController {
 
 
  @Get()
-  @UseGuards(AutenticadorGuard)
-  @ApiBearerAuth()
+  //@UseGuards(AutenticadorGuard)
+  //@ApiBearerAuth()
   @ApiOperation({ summary: 'Array de usuarios de la DB' })
   @ApiQuery({ name: 'page', required: true, type: Number, example: 1 })
   @ApiQuery({ name: 'limit', required: true, type: Number, example: 10 })
@@ -43,7 +43,22 @@ export class UsuarioController {
       limit: parseInt(limit) || 10,
     });
   }
-
+ 
+  @Get('sellers/')
+  //@UseGuards(AutenticadorGuard)
+  //@ApiBearerAuth()
+  @ApiOperation({ summary: 'Array de usuarios vendedores de la DB' })
+  @ApiQuery({ name: 'page', required: true, type: Number, example: 1 })
+  @ApiQuery({ name: 'limit', required: true, type: Number, example: 10 })
+  getAllSellerList(
+    @Query('page') page: string,
+    @Query('limit') limit: string,
+  ) {
+    return this.usuarioService.getAllSellerList({
+      page: parseInt(page) || 1,
+      limit: parseInt(limit) || 10,
+    });
+  }
 
   @Get(':id')
     @ApiOperation({summary: 'Obtiene un usuario de la DB segun su ID'})
