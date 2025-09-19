@@ -11,7 +11,7 @@ const Signin = () => {
   const router = useRouter(); //para navegar manualmente
   const inputFormLogin = { email: "", password: "" };
   const [login, setLogin] = useState<Login>(inputFormLogin);
-  const { user, setUser } = useUser();
+  const { setUser } = useUser();
   const { setSesion } = useAuth();
   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
