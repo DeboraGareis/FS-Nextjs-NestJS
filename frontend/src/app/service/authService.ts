@@ -37,7 +37,7 @@ export type RespuestaRegisterDelBack = z.infer<
 //coneccion con APIs
 export const signin = async (login: Login) => {
   try {
-    const res = await host.post<RespuestaSigninBack>("auth/login", login, {
+    await host.post<RespuestaSigninBack>("auth/login", login, {
       withCredentials: true,
     });
     // res.data;
