@@ -58,6 +58,9 @@ export class AuthService {
   async cookieAutenticacion(token, res: Response) {
     return res.cookie('access_token', token, {
       httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      path: '/',
     });
   }
 
@@ -89,8 +92,8 @@ export class AuthService {
     res.clearCookie('access_token', {
       httpOnly: true, // mantenelo seguro
       secure: true, // recomendable si usas https
-      sameSite: 'strict', // ajustá según tu caso
-      path: '/', // mismo path que al crearla
+      sameSite: 'none', // ajustá según tu caso
+      path: '/',
     });
     return { message: 'Cookie eliminada' };
   }
