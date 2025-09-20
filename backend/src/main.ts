@@ -5,14 +5,19 @@ import { ValidationPipe } from '@nestjs/common';
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 import * as cookieParser from 'cookie-parser';
 import { IoAdapter } from '@nestjs/platform-socket.io';
+import { ExpressAdapter } from '@nestjs/platform-express';
+import * as express from 'express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const server = express();
+  const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
+  // confiar en proxy para que no elimine "secure"
+  server.set('trust proxy', 1); // Railway/Heroku necesitan esto para respetar secure cookies
   //cookies con express
   app.use(cookieParser());
   //corss
   const corsOptions: CorsOptions = {
-    origin: true,
+    origin: 'https://fs-nextjs-nest.js.vercel.app',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   };
