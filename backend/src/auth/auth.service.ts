@@ -18,6 +18,7 @@ export class AuthService {
     pass: string,
     res: Response,
   ): Promise<{ access_token: string } | undefined> {
+
     const user = await this.prisma.usuario.findUnique({
       where: { email: mail },
     });
@@ -57,7 +58,10 @@ export class AuthService {
   //*metodo que envia el token al navegador, y lo guarda en una cookie*//
   async cookieAutenticacion(token, res: Response) {
     return res.cookie('access_token', token, {
-      httpOnly: true,secure: true,sameSite: 'none'
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      maxAge: 24 * 60 * 60,
     });
   }
 
@@ -89,7 +93,8 @@ export class AuthService {
     res.clearCookie('access_token', {
       httpOnly: true, // mantenelo seguro
       secure: true, // recomendable si usas https
-      sameSite: 'none', // ajustá según tu caso 
+      sameSite: 'none', // ajustá según tu caso
+      maxAge: 24 * 60 * 60,
     });
     return { message: 'Cookie eliminada' };
   }
