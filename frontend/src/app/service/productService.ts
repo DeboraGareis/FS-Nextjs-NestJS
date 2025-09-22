@@ -25,7 +25,9 @@ export const crearProducto = async (data: Product, file: File) => {
     });
 
     return res.data;
-  } catch (e: any) {
+  } 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  catch (e: any) {
     let error = "Error al crear el producto";
     if (e?.response?.data?.message) {
       error = e.response.data.message;
@@ -44,7 +46,9 @@ export const ObtenerProductos = async () => {
       withCredentials: true,
     });
     return res.data;
-  } catch (e: any) {
+  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any 
+  catch (e: any) {
     let error = "Error obtener todos los productos ";
     if (e?.response?.data?.message) {
       error = e.response.data.message;
@@ -61,7 +65,9 @@ export const ObtenerProductosVendedor = async (adminId: string) => {
   try {
     const res = await host.get(`/producto/productos/${adminId}`);
     return res.data;
-  } catch (e: any) {
+  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any 
+  catch (e: any) {
     if (e?.response?.status === 404) {
       console.warn("No hay productos para este vendedor");
       return [];

@@ -16,13 +16,13 @@ const MensajeDeAyudaZod = z
     texto: dato.texto,
     leido: dato.leido,
   }));
-// Inferimos el tipo de TS a partir del esquema
-export type MensajeDeAyuda = z.infer<typeof MensajeDeAyudaZod>;
+// tipo de claves que usa el front
+export type MensajeDeAyudaFront = z.input<typeof MensajeDeAyudaZod>;
 
-// Inferimos el tipo de TS a partir del esquema que solicita el backend
+// tipo de claves que solicita el backend
 export type MensajeDeAyudaBack = z.output<typeof MensajeDeAyudaZod>;
 
-export const mensajeDeAyuda = async (dato: MensajeDeAyuda) => {
+export const mensajeDeAyuda = async (dato: MensajeDeAyudaFront) => {
   try {
     // Validación runtime
     console.log("dato###", dato);
@@ -57,7 +57,9 @@ export const ObtenerMensajes = async () => {
   try {
     const res = await host.get("mensaje");
     return res.data;
-  } catch (e: any) {
+  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   catch (e: any) {
     let error = "Error obtener mensajes";
     if (e?.response?.data?.message) {
       error = e.response.data.message;

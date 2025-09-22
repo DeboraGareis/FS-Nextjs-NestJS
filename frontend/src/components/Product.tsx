@@ -1,9 +1,11 @@
 "use client";
-import { MensajeDeAyuda, mensajeDeAyuda } from "@/app/service/mensajeService";
+import {
+  MensajeDeAyudaFront,
+  mensajeDeAyuda,
+} from "@/app/service/mensajeService";
 import { useUser } from "@/context/UserContext";
 import Image from "next/image";
 import { useState } from "react";
-
 
 export type ProductType = {
   id: string;
@@ -15,26 +17,21 @@ export type ProductType = {
   idAdministrador: string;
 };
 
-
 type Props = {
   producto: ProductType;
- 
 };
-
 
 export default function Product({ producto }: Props) {
   const { user } = useUser();
 
-
-  const [mensaje] = useState<MensajeDeAyuda>({
+  const [mensaje] = useState<MensajeDeAyudaFront>({
     idAdministrador: "",
     idComprador: "",
     texto: "",
     leido: "",
   });
 
-
-  const handleClick = async (event) => {
+  const handleClick = async () => {
     try {
       alert(`Hola, quiero saber mas del producto ${producto.nombre}`);
       mensaje.idAdministrador = user;
@@ -42,15 +39,13 @@ export default function Product({ producto }: Props) {
       mensaje.texto = `Hola, quiero saber mas del producto ${producto.nombre}`;
       mensaje.leido = "No";
 
-
-      const res = await mensajeDeAyuda(mensaje);
+      await mensajeDeAyuda(mensaje);
       alert("mensaje enviado");
     } catch (error) {
       console.error("Error en handleClick:", error);
       alert(error.message);
     }
   };
-
 
   return (
     <div className="flex flex-col items-center border-gray-300 p-2 w-48 shadow-md">
@@ -71,32 +66,28 @@ export default function Product({ producto }: Props) {
         />
       </div>
 
-
       {/* Botón de ayuda + cantidad */}
-  {producto.idAdministrador!=user && (
-  <>
-    <button
-      role="img"
-      aria-label="info"
-      className="text-xl bg-gray-200 rounded-full w-7 h-7 flex items-center justify-center hover:bg-gray-300 motion-safe:hover:scale-120"
-      onClick={handleClick}
-    >
-      ?
-    </button>
-    <span
-      onClick={handleClick}
-      className="absolute block -translate-x-1.2 mt-28 p-2 text-xs text-1E4137 bg-CFFBEE rounded opacity-0 group-hover:opacity-100 transition-opacity"
-    >
-      Click para comunicarse con el vendedor por {producto.nombre}
-    </span>
-  </>
-)}
+      <div className="relative group flex items-center gap-2">
+        {producto.idAdministrador != user && (
+          <>
+            <button
+              role="img"
+              aria-label="info"
+              className="text-xl bg-gray-200 rounded-full w-7 h-7 flex items-center justify-center hover:bg-gray-300 motion-safe:hover:scale-120"
+              onClick={handleClick}
+            >
+              ?
+            </button>
+            <span
+              onClick={handleClick}
+              className="absolute block -translate-x-1.2 mt-28 p-2 text-xs text-1E4137 bg-CFFBEE rounded opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              Click para comunicarse con el vendedor por {producto.nombre}
+            </span>
+          </>
+        )}
+        <p className="text-sm text-gray-700">Stock: {producto.stock}</p>
+      </div>
     </div>
   );
 }
-
-
-
-
-
-

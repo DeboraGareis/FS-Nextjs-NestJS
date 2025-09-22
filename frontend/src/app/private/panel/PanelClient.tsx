@@ -5,7 +5,7 @@ import Product, { ProductType } from "@/components/Product";
 import Seller, { SellerType } from "@/components/Seller";
 import Search from "@/components/Search";
 import { useUser } from "@/context/UserContext";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ObtenerUserPorId } from "@/app/service/userService";
 
 export type UserType = {
@@ -32,6 +32,10 @@ export default function PanelClient({ productos, vendedores }: Props) {
   });
   const [productosFiltrados, setProductosFiltrados] =
     useState<ProductType[]>(productos);
+  
+  const handleResults = useCallback((res: ProductType[]) => {
+  setProductosFiltrados(res);
+}, []);
   useEffect(() => {
     const DataUser = async () => {
       if (user) {
@@ -88,10 +92,7 @@ export default function PanelClient({ productos, vendedores }: Props) {
           {/* lista productos */}
           <div className="text-emerald-600 text-2xl font-extrabold my-4 px-7 py-5">
             <p>Otros productos</p>
-            <Search
-              productos={productos}
-              onResults={(res) => setProductosFiltrados(res)}
-            />
+            <Search productos={productos} onResults={handleResults} />
             <div className="flex flex-wrap border rounded-lg my-4 justify-center gap-6 px-7 py-5">
               {productosFiltrados.length > 0 ? (
                 productosFiltrados.map((p, i) => (
