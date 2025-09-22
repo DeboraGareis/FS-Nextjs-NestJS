@@ -17,7 +17,7 @@ async function bootstrap() {
   app.use(cookieParser());
   //corss
   const corsOptions: CorsOptions = {
-    origin: true,
+    origin: "https://tu-frontend.vercel.app",
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   };
