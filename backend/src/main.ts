@@ -17,7 +17,7 @@ async function bootstrap() {
   app.use(cookieParser());
   //corss
   const corsOptions: CorsOptions = {
-    origin: 'https://flexistore-app.vercel.app',
+    origin: 'https://fs-nextjs-nest-js.vercel.app',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   };
