@@ -17,7 +17,7 @@ async function bootstrap() {
   app.use(cookieParser());
   //corss
   const corsOptions: CorsOptions = {
-    origin: 'https://fs-nextjs-nest.js.vercel.app',
+    origin: 'https://flexistore-app.vercel.app',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   };
@@ -44,6 +44,6 @@ async function bootstrap() {
       transform: true,
     }),
   ); //!usar los pipes, osea los validadores
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 8080);
 }
 bootstrap();
