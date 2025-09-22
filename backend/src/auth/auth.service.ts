@@ -57,7 +57,7 @@ export class AuthService {
   //*metodo que envia el token al navegador, y lo guarda en una cookie*//
   async cookieAutenticacion(token, res: Response) {
     return res.cookie('access_token', token, {
-      httpOnly: true,
+      httpOnly: true,secure: true,sameSite: 'none'
     });
   }
 
@@ -89,8 +89,7 @@ export class AuthService {
     res.clearCookie('access_token', {
       httpOnly: true, // mantenelo seguro
       secure: true, // recomendable si usas https
-      sameSite: 'strict', // ajustá según tu caso
-      path: '/', // mismo path que al crearla
+      sameSite: 'none', // ajustá según tu caso 
     });
     return { message: 'Cookie eliminada' };
   }
