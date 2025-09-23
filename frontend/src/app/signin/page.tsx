@@ -33,12 +33,11 @@ const Signin = () => {
       const userId = await Me();
       console.log("Me() devuelve:", userId);
 
-      if (userId?.userId) {
+      if (userId) {
         console.log("paso por el if del submit:", userId.userId);
         router.push("/private/panel");
         setSesion(true);
         setUser(userId?.userId);
-        return;
       }
     } catch (e) {
       if (e instanceof Error) {
