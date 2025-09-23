@@ -30,14 +30,16 @@ const Signin = () => {
         router.push("/signin");
         return;
       }
+      console.log("antes del Me()");
+
       const userId = await Me();
       console.log("Me() devuelve:", userId);
 
       if (userId) {
         console.log("paso por el if del submit:", userId.userId);
-        router.push("/private/panel");
         setSesion(true);
         setUser(userId?.userId);
+        router.push("/private/panel");
       }
     } catch (e) {
       if (e instanceof Error) {
