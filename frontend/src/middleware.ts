@@ -3,10 +3,10 @@ import { NextResponse, type NextRequest } from "next/server";
 export async function middleware(req: NextRequest) {
   const token = req.cookies.get("access_token")?.value;
 
-  // si no hay token → redirect
-  if (!token) {
-    return NextResponse.redirect(new URL("/", req.url));
-  }
+  // //si no hay token → redirect
+  // if (!token) {
+  //   return NextResponse.redirect(new URL("/", req.url));
+  // }
   return NextResponse.next();
 }
 
