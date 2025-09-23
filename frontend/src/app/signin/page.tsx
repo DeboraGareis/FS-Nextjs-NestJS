@@ -1,8 +1,8 @@
 "use client";
 import Image from "next/image";
-import { Button } from "../utils/Button";
+import { Button } from "@/app/utils/Button";
 import { useState } from "react";
-import { Login, Me, signin } from "../service/authService";
+import { Login, Me, signin } from "@/app/service/authService";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useUser } from "@/context/UserContext";
@@ -31,10 +31,14 @@ const Signin = () => {
         return;
       }
       const userId = await Me();
-      if (userId) {
+      console.log("Me() devuelve:", userId);
+
+      if (userId?.userId) {
+        console.log("paso por el if del submit:", userId.userId);
         router.push("/private/panel");
         setSesion(true);
-        setUser(userId.userId);
+        setUser(userId?.userId);
+        return;
       }
     } catch (e) {
       if (e instanceof Error) {
@@ -49,7 +53,7 @@ const Signin = () => {
   return (
     <div className="text-145B46 flex items-center justify-center flex-col py-20">
       <h2 className="text-lg font-semibold">Iniciar sesión</h2>
-      <form action="#" onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <div className="flex flex-col">
           <input
             name="email"
