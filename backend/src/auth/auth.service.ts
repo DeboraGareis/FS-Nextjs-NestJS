@@ -18,7 +18,6 @@ export class AuthService {
     pass: string,
     res: Response,
   ): Promise<{ access_token: string } | undefined> {
-    console.log('🍎 ', mail);
 
     const user = await this.prisma.usuario.findUnique({
       where: { email: mail },
