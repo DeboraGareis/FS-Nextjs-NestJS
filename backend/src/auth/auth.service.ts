@@ -18,7 +18,6 @@ export class AuthService {
     pass: string,
     res: Response,
   ): Promise<{ access_token: string } | undefined> {
-
     const user = await this.prisma.usuario.findUnique({
       where: { email: mail },
     });
@@ -61,7 +60,8 @@ export class AuthService {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
-      maxAge: 24 * 60 * 60,
+      maxAge: 24 * 60 * 60 * 1000,
+      path: '/',
     });
   }
 
@@ -94,7 +94,8 @@ export class AuthService {
       httpOnly: true, // mantenelo seguro
       secure: true, // recomendable si usas https
       sameSite: 'none', // ajustá según tu caso
-      maxAge: 24 * 60 * 60,
+      maxAge: 24 * 60 * 60 * 1000,
+      path: '/',
     });
     return { message: 'Cookie eliminada' };
   }
