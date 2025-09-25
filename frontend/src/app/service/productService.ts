@@ -22,7 +22,6 @@ export const crearProducto = async (data: Product, file: File) => {
       headers: {
         "Content-Type": "multipart/form-data",
       },
-      withCredentials: true,
     });
 
     return res.data;
@@ -42,9 +41,7 @@ export const crearProducto = async (data: Product, file: File) => {
 
 export const ObtenerProductos = async () => {
   try {
-    const res = await host.get("/producto", {
-      withCredentials: true,
-    });
+    const res = await host.get("/producto");
     return res.data;
   } catch (e: any) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -62,9 +59,7 @@ export const ObtenerProductos = async () => {
 //la vista de cliente?
 export const ObtenerProductosVendedor = async (adminId: string) => {
   try {
-    const res = await host.get(`/producto/productos/${adminId}`, {
-      withCredentials: true,
-    });
+    const res = await host.get(`/producto/productos/${adminId}`);
     return res.data;
   } catch (e: any) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
