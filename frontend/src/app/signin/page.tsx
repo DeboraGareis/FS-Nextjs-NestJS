@@ -30,16 +30,20 @@ const Signin = () => {
         router.push("/signin");
         return;
       }
-      console.log("antes del Me()");
+      // Verifica que el token esté en las cookies
+      console.log("Token después del signin:", document.cookie);
 
       const userId = await Me();
       console.log("Me() devuelve:", userId);
+      console.log("Token después del me...:", document.cookie);
 
       if (userId) {
         console.log("paso por el if del submit:", userId.userId);
         setSesion(true);
         setUser(userId?.userId);
-        router.push("/private/panel");
+        // Verifica el token antes de la redirección
+        console.log("Token antes de redirigir:", document.cookie);
+        router.push("private/panel");
       }
     } catch (e) {
       if (e instanceof Error) {

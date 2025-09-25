@@ -40,6 +40,10 @@ export const signin = async (login: Login) => {
     const res = await host.post<RespuestaSigninBack>("/auth/login", login, {
       withCredentials: true,
     });
+     if (res.headers.) {
+    // Establece la cookie con el mismo nombre que busca el middleware
+    document.cookie = `access_token=${data.token}; path=/; secure; samesite=strict`;
+  }
     res.data;
     return true;
   } catch (e: any) {
@@ -88,10 +92,10 @@ export const Me = async () => {
   } catch (e: any) {
     let error: string = "Hay un error";
     if (e?.response?.data?.message) {
-      console.error("e?.response?.data: ", e?.response?.data);
+      console.error("error del Me: ", e?.response?.data);
       error = e.response.data.message;
     } else if (e instanceof Error) {
-      console.error("e.message: ", e.message);
+      console.error("error del Me: ", e.message);
       error = e.message;
     }
     throw new Error(`Error = ${error}`);
