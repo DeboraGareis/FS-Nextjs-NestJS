@@ -61,6 +61,7 @@ export class AuthService {
       secure: true,
       sameSite: 'none',
       maxAge: 86400000,
+      path: '/',
     });
   }
 
@@ -94,6 +95,7 @@ export class AuthService {
       secure: true, // recomendable si usas https
       sameSite: 'none', // ajustá según tu caso
       maxAge: 86400000,
+      path: '/',
     });
     return { message: 'Cookie eliminada' };
   }
