@@ -41,9 +41,11 @@ const Signin = () => {
         console.log("paso por el if del submit:", userId.userId);
         setSesion(true);
         setUser(userId?.userId);
-        // Verifica el token antes de la redirección
-        console.log("Token antes de redirigir:", document.cookie);
-        router.push("private/panel");
+
+        // Espera un poco para que las cookies se propaguen
+        setTimeout(() => {
+          router.push("/private/panel");
+        }, 300);
       }
     } catch (e) {
       if (e instanceof Error) {
