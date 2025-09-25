@@ -39,7 +39,7 @@ export const ObtenerUserPorId = async (
   id: string,
 ): Promise<UserType | null> => {
   try {
-    const res = await host.get(`/usuario/${id}`);
+    const res = await host.get(`/usuario/${id}`, { withCredentials: true });
     return res.data;
   } catch (e: any) {
     if (e?.response?.status === 404) {

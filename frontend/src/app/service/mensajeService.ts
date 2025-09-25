@@ -28,7 +28,7 @@ export const mensajeDeAyuda = async (dato: MensajeDeAyudaFront) => {
     console.log("dato###", dato);
 
     const payload = MensajeDeAyudaZod.parse(dato);
-    const res = await host.post("mensaje", payload);
+    const res = await host.post("mensaje", payload, { withCredentials: true });
     return res.data;
   } catch (error) {
     // tirar error de Zod
@@ -55,11 +55,10 @@ export const ObtenerMensajes = async () => {
   //? hacer un metodo en el backend qque filtre con el id del emisor
   //? y el id de receptor
   try {
-    const res = await host.get("mensaje");
+    const res = await host.get("mensaje", { withCredentials: true });
     return res.data;
-  }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-   catch (e: any) {
+  } catch (e: any) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let error = "Error obtener mensajes";
     if (e?.response?.data?.message) {
       error = e.response.data.message;

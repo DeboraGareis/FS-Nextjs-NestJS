@@ -88,10 +88,10 @@ export const Me = async () => {
   } catch (e: any) {
     let error: string = "Hay un error";
     if (e?.response?.data?.message) {
-      console.log("e?.response?.data: ", e?.response?.data);
+      console.error("e?.response?.data: ", e?.response?.data);
       error = e.response.data.message;
     } else if (e instanceof Error) {
-      console.log("e.message: ", e.message);
+      console.error("e.message: ", e.message);
       error = e.message;
     }
     throw new Error(`Error = ${error}`);
