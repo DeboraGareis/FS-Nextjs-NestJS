@@ -40,10 +40,6 @@ export const signin = async (login: Login) => {
     const res = await host.post<RespuestaSigninBack>("/auth/login", login, {
       withCredentials: true,
     });
-     if (res.headers.) {
-    // Establece la cookie con el mismo nombre que busca el middleware
-    document.cookie = `access_token=${data.token}; path=/; secure; samesite=strict`;
-  }
     res.data;
     return true;
   } catch (e: any) {

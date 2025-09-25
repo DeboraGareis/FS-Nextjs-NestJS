@@ -42,10 +42,17 @@ const Signin = () => {
         setSesion(true);
         setUser(userId?.userId);
 
-        // Espera un poco para que las cookies se propaguen
-        setTimeout(() => {
-          router.push("/private/panel");
-        }, 300);
+        // Verificar que la cookie existe antes de navegar
+        const checkCookieAndNavigate = () => {
+          if (document.cookie.includes("access_token")) {
+            router.push("/private/panel");
+          } else {
+            // Si no está, espera un poco más
+            setTimeout(checkCookieAndNavigate, 100);
+          }
+        };
+
+        checkCookieAndNavigate();
       }
     } catch (e) {
       if (e instanceof Error) {
