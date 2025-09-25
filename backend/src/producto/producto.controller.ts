@@ -43,7 +43,7 @@ export class ProductoController {
   @Post()
   // @Roles(Rol.ADMINISTRADOR, Rol.USUARIO)
   //@UseGuards(RolesGuard)
-  @ApiBearerAuth()
+  // @ApiBearerAuth()
   @UseInterceptors(FileInterceptor('file')) // "file" es como espero la imagen
   @ApiOperation({ summary: 'Crear un producto' })
   @ApiConsumes('multipart/form-data')
