@@ -44,7 +44,7 @@ const Signin = () => {
 
         // Forzar que el router espere
         setTimeout(() => {
-          router.push("/private/panel");
+          router.push("/app/private/panel");
           router.refresh(); // Fuerza un refresh del router
         }, 500);
       }
