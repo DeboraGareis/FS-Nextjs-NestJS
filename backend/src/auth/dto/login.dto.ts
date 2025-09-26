@@ -16,9 +16,17 @@ export class LoginDto {
   })
   @IsNotEmpty()
   @IsString()
-  @IsString()
   @IsNotEmpty()
   @MinLength(6)
   @ApiProperty()
   password: string;
+}
+
+export class TokenDto {
+  @ApiProperty({
+    description: 'token',
+  })
+  @IsString()
+  @IsNotEmpty()
+  access_token: string;
 }

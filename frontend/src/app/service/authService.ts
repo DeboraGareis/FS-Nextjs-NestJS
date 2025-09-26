@@ -34,7 +34,7 @@ export type RespuestaRegisterDelBack = z.infer<
   typeof RespuestaRegisterDelBackZod
 >;
 type Token = {
-  token: string;
+  access_token: string;
 };
 //coneccion con APIs
 export const signin = async (login: Login) => {
@@ -82,12 +82,12 @@ export const Signup = async (register: Register) => {
 
 export const Me = async (token: Token) => {
   try {
-    const access_token = token.token;
+    console.log("llega el token? al me?", token);
 
-    console.log("🔍 access_token object:", access_token); // Debug
-    console.log("🔍 token extracted:", token); // Debug
-    console.log("🔍 URL completa:", `/auth/me/${token}`); // Debug
-    const res = await host.get(`/auth/me/${access_token}`);
+    const access_token = token.access_token;
+    console.log("🔍 URL completa:", `/auth/me/`, { access_token });
+
+    const res = await host.post(`/auth/me/`, { access_token });
     return res.data;
   } catch (e: any) {
     let error: string = "Hay un error";
