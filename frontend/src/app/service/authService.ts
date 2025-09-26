@@ -81,9 +81,7 @@ export const Signup = async (register: Register) => {
 
 export const Me = async () => {
   try {
-    console.log("Antes de mi");
     const res = await host.get("/auth/me", { withCredentials: true });
-    console.log("Despues de mi...", res.data);
     return res.data;
   } catch (e: any) {
     let error: string = "Hay un error";
