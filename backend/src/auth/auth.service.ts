@@ -56,14 +56,13 @@ export class AuthService {
   }
   //*metodo que envia el token al navegador, y lo guarda en una cookie*//
   async cookieAutenticacion(token: string, res: Response) {
-  return res.cookie('access_token', token, {
-    httpOnly: true,
-    secure: true,
-    sameSite: 'none',
-    domain: 'flexistore-production.up.railway.app',
-    maxAge: 1000 * 60 * 60 * 24, // 1 día
-  });
-}
+    return res.cookie('access_token', token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      maxAge: 1000 * 60 * 60 * 24, // 1 día
+    });
+  }
 
   //*metodo que toma el valor de la cookie y verifica de que el token no sea corrupto y devuelve los datos que contiene por payload *//
   async datosUtiles(
@@ -93,11 +92,8 @@ export class AuthService {
     res.clearCookie('access_token', {
       httpOnly: true, // mantenelo seguro
       secure: true, // recomendable si usas https
-      sameSite: 'none', // ajustá según tu caso 
-      domain: 'flexistore-production.up.railway.app',
+      sameSite: 'none', // ajustá según tu caso
     });
     return { message: 'Cookie eliminada' };
   }
-
- 
 }

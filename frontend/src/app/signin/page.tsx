@@ -32,8 +32,6 @@ const Signin = () => {
         return;
       }
 
-      console.log("Token después del signin:", document.cookie);
-
       const userData = await Me();
       console.log("Me() devuelve:", userData);
 
