@@ -57,9 +57,8 @@ export const ObtenerMensajes = async () => {
   try {
     const res = await host.get("mensaje");
     return res.data;
-  }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-   catch (e: any) {
+  } catch (e: any) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let error = "Error obtener mensajes";
     if (e?.response?.data?.message) {
       error = e.response.data.message;

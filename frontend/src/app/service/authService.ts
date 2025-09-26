@@ -46,10 +46,10 @@ export const signin = async (login: Login) => {
     let error: string = "Hay un error";
 
     if (e?.response?.data?.message) {
-      console.log("e?.response?.data: ", e?.response?.data);
+      console.log("error del signin: ", e?.response?.data);
       error = e.response.data.message;
     } else if (e instanceof Error) {
-      console.log("e.message: ", e.message);
+      console.log("e.message:error del signin: ", e.message);
       error = e.message;
     }
     throw new Error(`Error = ${error}`);
@@ -69,7 +69,7 @@ export const Signup = async (register: Register) => {
   } catch (e: any) {
     let error: string = "Hay un error";
     if (e?.response?.data?.message) {
-      console.log("e?.response?.data: ", e?.response?.data);
+      console.log("error del signup?.response?.data: ", e?.response?.data);
       error = e.response.data.message;
     } else if (e instanceof Error) {
       console.log("e.message: ", e.message);
@@ -86,10 +86,10 @@ export const Me = async () => {
   } catch (e: any) {
     let error: string = "Hay un error";
     if (e?.response?.data?.message) {
-      console.log("e?.response?.data: ", e?.response?.data);
+      console.error("error del Me: ", e?.response?.data);
       error = e.response.data.message;
     } else if (e instanceof Error) {
-      console.log("e.message: ", e.message);
+      console.error("error del Me: ", e.message);
       error = e.message;
     }
     throw new Error(`Error = ${error}`);

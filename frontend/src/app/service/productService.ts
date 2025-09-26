@@ -25,9 +25,8 @@ export const crearProducto = async (data: Product, file: File) => {
     });
 
     return res.data;
-  } 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  catch (e: any) {
+  } catch (e: any) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let error = "Error al crear el producto";
     if (e?.response?.data?.message) {
       error = e.response.data.message;
@@ -42,13 +41,10 @@ export const crearProducto = async (data: Product, file: File) => {
 
 export const ObtenerProductos = async () => {
   try {
-    const res = await host.get("/producto", {
-      withCredentials: true,
-    });
+    const res = await host.get("/producto");
     return res.data;
-  }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any 
-  catch (e: any) {
+  } catch (e: any) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let error = "Error obtener todos los productos ";
     if (e?.response?.data?.message) {
       error = e.response.data.message;
@@ -65,9 +61,8 @@ export const ObtenerProductosVendedor = async (adminId: string) => {
   try {
     const res = await host.get(`/producto/productos/${adminId}`);
     return res.data;
-  }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any 
-  catch (e: any) {
+  } catch (e: any) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if (e?.response?.status === 404) {
       console.warn("No hay productos para este vendedor");
       return [];

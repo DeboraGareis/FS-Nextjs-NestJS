@@ -5,7 +5,6 @@ const host = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, // así manda las cookies
 });
 
 export default host;

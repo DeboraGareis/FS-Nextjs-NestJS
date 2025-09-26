@@ -1,8 +1,8 @@
 "use client";
 import Image from "next/image";
-import { Button } from "../utils/Button";
+import { Button } from "@/app/utils/Button";
 import { useState } from "react";
-import { Login, Me, signin } from "../service/authService";
+import { Login, Me, signin } from "@/app/service/authService";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useUser } from "@/context/UserContext";
@@ -13,6 +13,7 @@ const Signin = () => {
   const [login, setLogin] = useState<Login>(inputFormLogin);
   const { setUser } = useUser();
   const { setSesion } = useAuth();
+
   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setLogin({
@@ -30,26 +31,36 @@ const Signin = () => {
         router.push("/signin");
         return;
       }
-      const userId = await Me();
-      if (userId) {
-        router.push("/private/panel");
+
+      console.log("Token después del signin:", document.cookie);
+
+      const userData = await Me();
+      console.log("Me() devuelve:", userData);
+
+      if (userData?.userId) {
+        console.log("paso por el if del submit:", userData.userId);
         setSesion(true);
-        setUser(userId.userId);
+        setUser(userData.userId);
+
+        router.push("/private/panel"); // ✅ directo
+      } else {
+        console.warn("No se obtuvo userId, redirigiendo a signin");
+        router.push("/signin");
       }
     } catch (e) {
       if (e instanceof Error) {
         alert(e.message);
         setLogin(inputFormLogin);
-        return;
       }
     }
   };
+
   const [eyePassword, setEyePassword] = useState(false);
 
   return (
     <div className="text-145B46 flex items-center justify-center flex-col py-20">
       <h2 className="text-lg font-semibold">Iniciar sesión</h2>
-      <form action="#" onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <div className="flex flex-col">
           <input
             name="email"

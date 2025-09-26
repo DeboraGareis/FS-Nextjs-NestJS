@@ -3,9 +3,7 @@ import host from "./api";
 
 export const ObtenerUsuarios = async () => {
   try {
-    const res = await host.get("/usuario", {
-      withCredentials: true,
-    });
+    const res = await host.get("/usuario");
     return res.data.data;
   } catch (e: any) {
     let error = "Error obtener todos los usuarios ";
@@ -20,9 +18,7 @@ export const ObtenerUsuarios = async () => {
 
 export const ObtenerVendedores = async () => {
   try {
-    const res = await host.get("/usuario/sellers", {
-      withCredentials: true,
-    });
+    const res = await host.get("/usuario/sellers");
     return res.data.data;
   } catch (e: any) {
     let error = "Error obtener todos los vendedores ";
