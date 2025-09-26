@@ -17,10 +17,14 @@ async function bootstrap() {
   app.use(cookieParser());
   //corss
   const corsOptions: CorsOptions = {
-    origin: "https://flexistore-app.vercel.app",
+    origin: [
+    "https://flexistore-app.vercel.app",
+    "http://localhost:3000"
+  ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   };
+  
   app.enableCors(corsOptions);
 
   //configuracion de socket.io -> adaptador <- nativo de nest
