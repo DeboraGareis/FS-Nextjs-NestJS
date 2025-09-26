@@ -40,7 +40,7 @@ export const signin = async (login: Login) => {
     const res = await host.post<RespuestaSigninBack>("/auth/login", login, {
       withCredentials: true,
     });
-    res.data;
+    return res.data; 
     return true;
   } catch (e: any) {
     let error: string = "Hay un error";
@@ -98,7 +98,7 @@ export const Me = async () => {
 
 export const ClosedSession = async () => {
   try {
-    const closedSession = await host.delete("/auth/login");
+    const closedSession = await host.delete("/auth/login", { withCredentials: true });
     return closedSession;
   } catch (e: any) {
     if (e?.response?.data?.message) {
