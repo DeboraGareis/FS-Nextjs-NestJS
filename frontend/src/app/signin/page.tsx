@@ -13,6 +13,7 @@ const Signin = () => {
   const [login, setLogin] = useState<Login>(inputFormLogin);
   const { setUser } = useUser();
   const { setSesion } = useAuth();
+
   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setLogin({
@@ -30,32 +31,30 @@ const Signin = () => {
         router.push("/signin");
         return;
       }
-      // Verifica que el token esté en las cookies
+
       console.log("Token después del signin:", document.cookie);
 
-      const userId = await Me();
-      console.log("Me() devuelve:", userId);
-      console.log("Token después del me...:", document.cookie);
+      const userData = await Me();
+      console.log("Me() devuelve:", userData);
 
-      if (userId) {
-        console.log("paso por el if del submit:", userId.userId);
+      if (userData?.userId) {
+        console.log("paso por el if del submit:", userData.userId);
         setSesion(true);
-        setUser(userId?.userId);
+        setUser(userData.userId);
 
-        // Forzar que el router espere
-        setTimeout(() => {
-          router.push("/private/panel");
-          router.refresh(); // Fuerza un refresh del router
-        }, 500);
+        router.push("/private/panel"); // ✅ directo
+      } else {
+        console.warn("No se obtuvo userId, redirigiendo a signin");
+        router.push("/signin");
       }
     } catch (e) {
       if (e instanceof Error) {
         alert(e.message);
         setLogin(inputFormLogin);
-        return;
       }
     }
   };
+
   const [eyePassword, setEyePassword] = useState(false);
 
   return (
