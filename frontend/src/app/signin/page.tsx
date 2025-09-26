@@ -42,7 +42,7 @@ const Signin = () => {
         setSesion(true);
         setUser(userData.userId);
 
-        router.push("/private/panel"); // ✅ directo
+        router.push("/private/panel/"); // ✅ directo
       } else {
         console.warn("No se obtuvo userId, redirigiendo a signin");
         router.push("/signin");
