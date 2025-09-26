@@ -35,10 +35,7 @@ export class AuthService {
       }
       const payload = { rol: 'usuario', sub: user.id };
       const access_token = await this.jwtService.signAsync(payload);
-      //?envia el token a una cookie
-
-      await this.cookieAutenticacion(access_token, res);
-
+  
       return { access_token };
     }
     if (administrador) {
@@ -49,26 +46,13 @@ export class AuthService {
       }
       const payload = { rol: 'administrador', sub: administrador.id };
       const access_token = await this.jwtService.signAsync(payload);
-      //?envia el token a una cookie
-      await this.cookieAutenticacion(access_token, res);
       return { access_token };
     }
   }
-  //*metodo que envia el token al navegador, y lo guarda en una cookie*//
-  async cookieAutenticacion(token: string, res: Response) {
-    return res.cookie('access_token', token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none',
-      maxAge: 1000 * 60 * 60 * 24, // 1 día
-    });
-  }
-
-  //*metodo que toma el valor de la cookie y verifica de que el token no sea corrupto y devuelve los datos que contiene por payload *//
-  async datosUtiles(
-    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
-  ) {
-    const token = req.cookies?.['access_token'];
+  
+  
+  async datosUtiles(access_token:string ) {
+    const token = access_token
     if (!token) {
       throw new UnauthorizedException('No token found');
     }
@@ -86,14 +70,5 @@ export class AuthService {
     } catch (error) {
       throw new UnauthorizedException('Invalid token');
     }
-  }
-
-  async cerrarSesion(res: Response<any, Record<string, any>>) {
-    res.clearCookie('access_token', {
-      httpOnly: true, // mantenelo seguro
-      secure: true, // recomendable si usas https
-      sameSite: 'none', // ajustá según tu caso
-    });
-    return { message: 'Cookie eliminada' };
   }
 }

@@ -32,14 +32,12 @@ const Signin = () => {
         return;
       }
 
-      const userData = await Me();
-      console.log("Me() devuelve:", userData);
-
+      const userData = await Me(resServidor);
+      
       if (userData?.userId) {
         console.log("paso por el if del submit:", userData.userId);
         setSesion(true);
         setUser(userData.userId);
-
         router.push("/private/panel/"); // ✅ directo
       } else {
         console.warn("No se obtuvo userId, redirigiendo a signin");

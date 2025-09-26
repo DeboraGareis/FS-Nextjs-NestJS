@@ -33,15 +33,16 @@ const RespuestaRegisterDelBackZod = z.object({
 export type RespuestaRegisterDelBack = z.infer<
   typeof RespuestaRegisterDelBackZod
 >;
-
+type Access_token = {
+  access_token: string;
+};
 //coneccion con APIs
 export const signin = async (login: Login) => {
   try {
     const res = await host.post<RespuestaSigninBack>("/auth/login", login, {
       withCredentials: true,
     });
-    return res.data; 
-    return true;
+    return res.data;
   } catch (e: any) {
     let error: string = "Hay un error";
 
@@ -79,9 +80,10 @@ export const Signup = async (register: Register) => {
   }
 };
 
-export const Me = async () => {
+export const Me = async (access_token: Access_token) => {
   try {
-    const res = await host.get("/auth/me", { withCredentials: true });
+    const token = access_token.access_token;
+    const res = await host.get(`/auth/me/${token}`);
     return res.data;
   } catch (e: any) {
     let error: string = "Hay un error";
@@ -98,7 +100,9 @@ export const Me = async () => {
 
 export const ClosedSession = async () => {
   try {
-    const closedSession = await host.delete("/auth/login", { withCredentials: true });
+    const closedSession = await host.delete("/auth/login", {
+      withCredentials: true,
+    });
     return closedSession;
   } catch (e: any) {
     if (e?.response?.data?.message) {

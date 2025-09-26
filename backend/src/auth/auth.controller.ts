@@ -1,7 +1,16 @@
-import { Body, Controller, Delete, Get, Post, Req, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 
 @ApiTags('Auth')
@@ -18,13 +27,9 @@ export class AuthController {
     return this.authService.signIn(signInDto.email, signInDto.password, res);
   }
 
-  @Get('/me')
-  async datosUtiles(@Req() req: Request) {
-    return await this.authService.datosUtiles(req);
-  }
-
-  @Delete('login')
-  async cerrarSesion(@Res({ passthrough: true }) res: Response) {
-    return await this.authService.cerrarSesion(res);
+  @Get('me/:access_token')
+  @ApiParam({ name: 'access_token' })
+  async datosUtiles(@Param('access_token') access_token: string) {
+    return await this.authService.datosUtiles(access_token);
   }
 }
