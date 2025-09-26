@@ -33,8 +33,8 @@ const RespuestaRegisterDelBackZod = z.object({
 export type RespuestaRegisterDelBack = z.infer<
   typeof RespuestaRegisterDelBackZod
 >;
-type Access_token = {
-  access_token: string;
+type Token = {
+  token: string;
 };
 //coneccion con APIs
 export const signin = async (login: Login) => {
@@ -80,10 +80,14 @@ export const Signup = async (register: Register) => {
   }
 };
 
-export const Me = async (access_token: Access_token) => {
+export const Me = async (token: Token) => {
   try {
-    const token = access_token.access_token;
-    const res = await host.get(`/auth/me/${token}`);
+    const access_token = token.token;
+
+    console.log("🔍 access_token object:", access_token); // Debug
+    console.log("🔍 token extracted:", token); // Debug
+    console.log("🔍 URL completa:", `/auth/me/${token}`); // Debug
+    const res = await host.get(`/auth/me/${access_token}`);
     return res.data;
   } catch (e: any) {
     let error: string = "Hay un error";
