@@ -10,7 +10,12 @@ import { MensajeService } from './mensaje.service';
 import { CrearMensajeDto } from './dto/crear_mensaje.dto';
 @WebSocketGateway({
   cors: {
-    origin: ['http://localhost:3001'], //cambiar por el que corresponda o por el .env
+    origin: [
+      'https://fs-nextjs-nest-js.vercel.app/',
+      'https://fs-nextjs-nest-js.vercel.app',
+      'http://localhost:3000',
+      'http://localhost:3001',
+    ], //cambiar por el que corresponda o por el .env
     credentials: true,
   },
 })
