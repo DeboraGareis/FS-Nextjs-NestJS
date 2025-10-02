@@ -14,8 +14,8 @@ async function bootstrap() {
   //corss
   const corsOptions: CorsOptions = {
     origin: [
-      'https://fs-nextjs-nest-js.vercel.app/',
-      'https://fs-nextjs-nest-js.vercel.app',
+      'https://flexistore-gilt.vercel.app',
+      'https://flexistore-gilt.vercel.app/',
       'http://localhost:3000',
       'http://localhost:3001',
     ],
