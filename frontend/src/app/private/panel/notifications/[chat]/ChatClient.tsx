@@ -10,7 +10,7 @@ type Props = {
 };
 type socketType=null|Socket;
 export default function ChatClient({ chat }: Props) {
-  const hostServer = "http://localhost:3000";
+  const hostServer = process.env.NEXT_PUBLIC_API_URL;
   const { user } = useUser();
   const id = chat;
 
