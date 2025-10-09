@@ -7,6 +7,8 @@ import Search from "@/components/Search";
 import { useUser } from "@/context/UserContext";
 import { useCallback, useEffect, useState } from "react";
 import { ObtenerUserPorId } from "@/app/service/userService";
+import { ItemsCarrito } from "@/components/ItemsCarrito";
+import { useCarrito } from "@/context/CarritoContext";
 
 export type UserType = {
   id: string;
@@ -23,6 +25,12 @@ type Props = {
 
 export default function PanelClient({ productos, vendedores }: Props) {
   const { user } = useUser();
+  const { carritos } = useCarrito();
+
+  const obtenerCarritoDeVendedor = (idVendedor: string) => {
+    return carritos?.filter((c) => c.idVendedor === idVendedor);
+  };
+
   const [rtaUser, setRtaUser] = useState<UserType>({
     id: "",
     nombre: "",
@@ -32,10 +40,10 @@ export default function PanelClient({ productos, vendedores }: Props) {
   });
   const [productosFiltrados, setProductosFiltrados] =
     useState<ProductType[]>(productos);
-  
+
   const handleResults = useCallback((res: ProductType[]) => {
-  setProductosFiltrados(res);
-}, []);
+    setProductosFiltrados(res);
+  }, []);
   useEffect(() => {
     const DataUser = async () => {
       if (user) {
@@ -45,11 +53,6 @@ export default function PanelClient({ productos, vendedores }: Props) {
     };
     DataUser();
   }, [user]);
-
-  console.log("user: ", user, "//activo o no:", rtaUser.activo);
-  console.log("💟 productos: ", productos);
-
-  console.log("/////productos:  ", productos, "/////vendedores: ", vendedores);
 
   return (
     <div className="flex flex-col min-h-screen items-center justify-start p-8 pb-10 gap-10 sm:p-10">
@@ -77,15 +80,18 @@ export default function PanelClient({ productos, vendedores }: Props) {
           <div className="text-emerald-600 text-2xl font-extrabold my-4 px-7 py-5">
             Otras tiendas
             <div className="gap-6 px-7 py-5">
-              {vendedores.map((v, i) => (
-                <div className="flex" key={i}>
-                  <Seller
-                    vendedor={v}
-                    productos={productos}
-                   //vistaVendedor={rtaUser.activo}
-                  />
-                </div>
-              ))}
+              {vendedores.map((v, i) => {
+                const carritosDeEsteVendedor = obtenerCarritoDeVendedor(v.id);
+
+                return (
+                  <div className="flex" key={i}>
+                    <Seller vendedor={v} productos={productos} />
+                    {carritosDeEsteVendedor?.map((carrito, item) => (
+                      <ItemsCarrito key={item} id={carrito.id} />
+                    ))}
+                  </div>
+                );
+              })}
             </div>
           </div>
 

@@ -11,7 +11,6 @@ export class CarritoService {
   async crearCarrito(crearCarritoDto: CrearCarritoDto) {
     try {
       const { fecha, total, id_usuario } = crearCarritoDto;
-      console.log(crearCarritoDto);
 
       const nuevoCarrito = await this.prismaService.carrito.create({
         data: {
@@ -22,7 +21,6 @@ export class CarritoService {
           },
         },
       });
-      console.log(nuevoCarrito);
 
       return nuevoCarrito;
     } catch (error) {

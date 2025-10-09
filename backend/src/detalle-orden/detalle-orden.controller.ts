@@ -66,6 +66,20 @@ export class DetalleOrdenController {
     return await this.detalleOrdenService.buscarIdDetalleDeOrden(id);
   }
 
+  @Get('id-carrito/:id')
+  @ApiOperation({
+    summary:
+      'Conseguir un array de todos los detalles de orden que coinciden con el id del carrito',
+  })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'El id del carrito',
+  })
+  async buscarIdCarrito(@Param('id', new ParseUUIDPipe()) id: string) {
+    return await this.detalleOrdenService.buscarIdCarrito(id);
+  }
+
   @Patch(':id')
   @ApiOperation({
     summary: 'Actualizar 1 dato del detalle de orden por ID en la DB',

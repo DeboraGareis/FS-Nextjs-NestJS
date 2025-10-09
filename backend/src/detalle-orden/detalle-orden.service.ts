@@ -70,6 +70,23 @@ export class DetalleOrdenService {
     }
   }
 
+  async buscarIdCarrito(id: string) {
+    try {
+      const detallesOrden = await this.prismaService.detalleOrden.findMany({
+        where: { id_carrito: id },
+      });
+      if (detallesOrden.length === 0) {
+        throw new NotFoundException('Id de carrito no encontrado.');
+      }
+      return detallesOrden;
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException();
+    }
+  }
+
   async actualizarIdDetalleDeOrden(id: string, actualizarDetalleOrdenDto) {
     try {
       const { cantidad, id_carrito, id_producto, precio } =

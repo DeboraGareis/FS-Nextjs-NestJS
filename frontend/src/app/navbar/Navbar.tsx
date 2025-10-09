@@ -3,11 +3,15 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { useAuth } from "@/context/AuthContext";
+import { useToken } from "@/context/TokenContext";
 
 const Navbar = () => {
   const { sesion, setSesion } = useAuth();
+  const { eliminarToken } = useToken();
+
   const ClosedSession = () => {
     setSesion(false);
+    eliminarToken();
   };
   console.log("session activa?: ", sesion);
 

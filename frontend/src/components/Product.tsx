@@ -6,6 +6,7 @@ import {
 import { useUser } from "@/context/UserContext";
 import Image from "next/image";
 import { useState } from "react";
+import Carrito from "@/components/Carrito";
 
 export type ProductType = {
   id: string;
@@ -33,7 +34,7 @@ export default function Product({ producto }: Props) {
 
   const handleClick = async () => {
     try {
-      alert(`Hola, quiero saber mas del producto ${producto.nombre}`);
+      alert(`Se envio mensaje a vendedor del producto`);
       mensaje.idAdministrador = user;
       mensaje.idComprador = producto.idAdministrador;
       mensaje.texto = `Hola, quiero saber mas del producto ${producto.nombre}`;
@@ -41,9 +42,13 @@ export default function Product({ producto }: Props) {
 
       await mensajeDeAyuda(mensaje);
       alert("mensaje enviado");
-    } catch (error) {
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("Error en handleClick:", error);
+        alert(error.message);
+      }
       console.error("Error en handleClick:", error);
-      alert(error.message);
+      throw new Error();
     }
   };
 
@@ -73,21 +78,29 @@ export default function Product({ producto }: Props) {
             <button
               role="img"
               aria-label="info"
-              className="text-xl bg-gray-200 rounded-full w-7 h-7 flex items-center justify-center hover:bg-gray-300 motion-safe:hover:scale-120"
+              className="text-xl bg-gray-200 rounded-full w-7 h-7 flex items-center justify-center hover:bg-gray-300 motion-safe:hover:scale-120 cursor-pointer"
               onClick={handleClick}
             >
               ?
             </button>
             <span
               onClick={handleClick}
-              className="absolute block -translate-x-1.2 mt-28 p-2 text-xs text-1E4137 bg-CFFBEE rounded opacity-0 group-hover:opacity-100 transition-opacity"
+              className="z-10 absolute block -translate-x-30 -translate-y-14 mt-28 p-2 text-xs text-1E4137 bg-CFFBEE rounded opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
             >
-              Click para comunicarse con el vendedor por {producto.nombre}
+              Comunicarse con el vendedor de {producto.nombre}
             </span>
           </>
         )}
         <p className="text-sm text-gray-700">Stock: {producto.stock}</p>
       </div>
+      {/* boton para agregar a carrito */}
+      {producto.idAdministrador != user && (
+        <Carrito
+          idProducto={producto.id}
+          precio={producto.precio}
+          idUsuario={user}
+        />
+      )}
     </div>
   );
 }

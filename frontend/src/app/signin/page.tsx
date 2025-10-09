@@ -6,6 +6,7 @@ import { Login, Me, signin } from "@/app/service/authService";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useUser } from "@/context/UserContext";
+import { useToken } from "@/context/TokenContext";
 
 const Signin = () => {
   const router = useRouter(); //para navegar manualmente
@@ -13,6 +14,7 @@ const Signin = () => {
   const [login, setLogin] = useState<Login>(inputFormLogin);
   const { setUser } = useUser();
   const { setSesion } = useAuth();
+  const { guardarToken } = useToken();
 
   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -26,14 +28,15 @@ const Signin = () => {
     event.preventDefault();
     try {
       const resServidor = await signin(login);
-
+      guardarToken(resServidor.access_token);
       if (!resServidor) {
+        guardarToken(null);
         router.push("/signin");
         return;
       }
 
       const userData = await Me(resServidor);
-      
+
       if (userData?.userId) {
         console.log("paso por el if del submit:", userData.userId);
         setSesion(true);

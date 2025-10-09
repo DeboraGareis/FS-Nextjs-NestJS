@@ -1,3 +1,4 @@
+import { error } from "console";
 import host from "./api";
 
 export type Product = {
@@ -55,19 +56,31 @@ export const ObtenerProductos = async () => {
   }
 };
 
+export const ObtenerProductoSegunIdProducto = async (idProducto: string) => {
+  try {
+    const res = await host.get(`/producto/${idProducto}`);
+    return res.data;
+  } catch (e: unknown) {
+    if (e instanceof Error) {
+      throw e.message;
+    }
+    throw new Error();
+  }
+};
+
 //el administrador tambien puede ser cliente, si quiere usar
 //la vista de cliente?
 export const ObtenerProductosVendedor = async (adminId: string) => {
   try {
     const res = await host.get(`/producto/productos/${adminId}`);
     return res.data;
-  } catch (e: any) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if (e?.response?.status === 404) {
+  } catch (e: unknown) {
+    if (e instanceof Error) {
+      console.error(e);
       console.warn("No hay productos para este vendedor");
       return [];
     }
-    console.error("Fallo al obtener productos:", e.message);
+    console.error("Fallo al obtener productos:", e);
     return [];
   }
 };

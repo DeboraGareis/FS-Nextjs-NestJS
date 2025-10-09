@@ -9,7 +9,13 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+} from '@nestjs/swagger';
 import { CrearCarritoDto } from './dto/crear-carrito.dto';
 import { CarritoService } from './carrito.service';
 import { ActualizarCarritoDto } from './dto/actualizar-carrito.dto';
@@ -26,6 +32,7 @@ export class CarritoController {
   @Post()
   @Roles(Rol.USUARIO) //asignar el rol que puede acceder a esta informacion
   @UseGuards(AutenticadorGuard, RolesGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Crear carrito' })
   @ApiBody({ type: CrearCarritoDto })
   async crearCarrito(@Body() crearCarritoDto: CrearCarritoDto) {
