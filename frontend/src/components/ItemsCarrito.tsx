@@ -104,25 +104,17 @@ export const ItemsCarrito = ({ id }: Carrito) => {
 
   return (
     <>
-      <div className="group">
-        <div className="flex justify-end">
-          <div
-            onClick={verCarrito}
-            className="inline-block  mt-4  p-2 rounded-lg transition cursor-pointerhover:bg-emerald-400"
-          >
-            <Image
-              src={"/carrito.png"}
-              alt="carrito de compras"
-              height={60}
-              width={60}
-            />
-          </div>
-        </div>
-        <div className="flex justify-end">
-          <span className="opacity-0 group-hover:opacity-100 text-sm">
-            {" "}
-            Vista previa a Carrito
-          </span>
+      <div className="flex justify-end">
+        <div
+          onClick={verCarrito}
+          className="inline-block  mt-4  p-2 rounded-lg transition cursor-pointerhover:bg-emerald-400 hover:bg-emerald-500"
+        >
+          <Image
+            src={"/carrito.png"}
+            alt="carrito de compras"
+            height={60}
+            width={60}
+          />
         </div>
       </div>
       {mostrarCarrito && (
