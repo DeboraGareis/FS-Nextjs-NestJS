@@ -1,4 +1,3 @@
-import { useToken } from "@/context/TokenContext";
 import host from "./api";
 import { detalleOrdenService } from "./detalleOrdenService";
 
@@ -12,9 +11,8 @@ const carritoService = async (
   idProducto: string,
   precio: number,
   idUsuario: string,
+  token: string,
 ) => {
-  const { token } = useToken();
-
   const fecha = new Date();
 
   const carritoBack: CarritoBack = {
@@ -22,7 +20,6 @@ const carritoService = async (
     total: String(precio),
     id_usuario: idUsuario,
   };
-
   const res = await host.post("/carrito", carritoBack, {
     headers: {
       Authorization: "Bearer " + token,
@@ -35,6 +32,7 @@ const carritoService = async (
       id_producto: idProducto,
       cantidad: "1",
       precio: precio,
+      token: token,
     };
     await detalleOrdenService(crearDetalleOrden);
   }

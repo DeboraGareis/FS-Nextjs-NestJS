@@ -38,6 +38,8 @@ export const ItemsCarrito = ({ id }: Carrito) => {
 
   const verCarrito = async () => {
     try {
+      console.log("id de ver carrito", id);
+
       const resBack = await GetDetallesDeOrdenSegunIdCarrito(id);
 
       setDetallesDeOrden(resBack);
@@ -57,20 +59,31 @@ export const ItemsCarrito = ({ id }: Carrito) => {
     }
   };
 
-  const RestarOSumar = async (itemId: string, tipo: "mas" | "menos") => {
+  const RestarOSumar = async (
+    itemId: string,
+    itemPrecio: string,
+    tipo: "mas" | "menos",
+  ) => {
     if (!detallesDeOrden) return;
+    console.log("detallesDeOrden", detallesDeOrden);
 
     setDetallesDeOrden((prev) => {
-      if (!prev) return prev;
+      console.log("prev", prev);
 
+      if (!prev) return prev;
       // Mapeamos los detalles y actualizamos el que coincide
       return prev.map((detalle) => {
         if (detalle.id_producto === itemId) {
           const nuevaCantidad =
             tipo === "mas"
-              ? detalle.cantidad + 1
-              : Math.max(detalle.cantidad - 1, 1);
-          const subtotal = nuevaCantidad * detalle.precio;
+              ? Number(detalle.cantidad) + 1
+              : Math.max(Number(detalle.cantidad) - 1, 1);
+
+          const subtotal = nuevaCantidad * Number(itemPrecio);
+          console.log("nuevaCantidad", nuevaCantidad);
+
+          console.log("subtotal", subtotal);
+
           // actualiza en el backend??
           ActualizarDetalleDeOrdenSegunId(
             detalle.id,
@@ -78,7 +91,11 @@ export const ItemsCarrito = ({ id }: Carrito) => {
             subtotal,
           );
 
-          return { ...detalle, cantidad: nuevaCantidad };
+          return {
+            ...detalle,
+            cantidad: nuevaCantidad,
+            precio: Number(itemPrecio),
+          };
         }
         return detalle;
       });
@@ -87,25 +104,33 @@ export const ItemsCarrito = ({ id }: Carrito) => {
 
   return (
     <>
-      <div className="flex justify-end">
-        <div
-          onClick={verCarrito}
-          className="inline-block  mt-4 hover:bg-emerald-400 p-2 rounded-lg transition cursor-pointer"
-        >
-          <Image
-            src={"/carrito.png"}
-            alt="carrito de compras"
-            height={60}
-            width={60}
-          />
+      <div className="group">
+        <div className="flex justify-end">
+          <div
+            onClick={verCarrito}
+            className="inline-block  mt-4  p-2 rounded-lg transition cursor-pointerhover:bg-emerald-400"
+          >
+            <Image
+              src={"/carrito.png"}
+              alt="carrito de compras"
+              height={60}
+              width={60}
+            />
+          </div>
+        </div>
+        <div className="flex justify-end">
+          <span className="opacity-0 group-hover:opacity-100 text-sm">
+            {" "}
+            Vista previa a Carrito
+          </span>
         </div>
       </div>
       {mostrarCarrito && (
-        <form className="absolute left-1/6 md:left-1/3 z-50 bg-CFFBEE box-content size-96 px-4 border rounded-md shadow-lg">
+        <form className="absolute overflow-auto left-1/6 md:left-1/3 z-50 bg-CFFBEE box-content size-96 px-4 border rounded-md shadow-lg">
           <BottonCerrar onClick={() => setMostrarCarrito(false)} />
-          {itemsCarrito?.length
-            ? itemsCarrito.map((item) => (
-                <ul className="list-none" key={item.id}>
+          <ul className="list-none">
+            {itemsCarrito?.length
+              ? itemsCarrito.map((item) => (
                   <li className="pt-4" key={item.id}>
                     <Image
                       src={item.imagen}
@@ -116,25 +141,28 @@ export const ItemsCarrito = ({ id }: Carrito) => {
                     cantidad:{" "}
                     <BottonMenosOMas
                       simbolo="-"
-                      onClick={() => RestarOSumar(item.id, "menos")}
+                      onClick={() =>
+                        RestarOSumar(item.id, item.precio, "menos")
+                      }
                     />
-                    {detallesDeOrden?.map((item) => item.cantidad)}
+                    {detallesDeOrden?.map((p) => {
+                      if (p.id_producto === item.id) {
+                        return p.cantidad;
+                      }
+                    })}
                     <BottonMenosOMas
                       simbolo="+"
-                      onClick={() => RestarOSumar(item.id, "mas")}
+                      onClick={() => RestarOSumar(item.id, item.precio, "mas")}
                     />
                     <br />
                     nombre: {item.nombre}
                     <br />
                     precio x unidad: {item.precio}
-                    <br />
-                    subTotal:
-                    {detallesDeOrden?.map((item) => item.precio)}
-                    <hr className="w-1/3 justify-center" />
+                    <hr className="w-1/3 justify-center my-4" />
                   </li>
-                </ul>
-              ))
-            : "Cargando..."}
+                ))
+              : "Cargando..."}
+          </ul>
         </form>
       )}
     </>

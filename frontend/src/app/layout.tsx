@@ -14,8 +14,8 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <TokenProvider>
-          <AuthProvider>
+        <AuthProvider>
+          <TokenProvider>
             <CarritoProvider>
               <div className="bg-linear-to-t from-white to-emerald-100">
                 <UserProvider>
@@ -25,8 +25,8 @@ export default function RootLayout({
                 </UserProvider>
               </div>
             </CarritoProvider>
-          </AuthProvider>
-        </TokenProvider>
+          </TokenProvider>
+        </AuthProvider>
       </body>
     </html>
   );

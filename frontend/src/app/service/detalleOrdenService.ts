@@ -1,4 +1,3 @@
-import { useToken } from "@/context/TokenContext";
 import host from "./api";
 
 interface DetalleOrdenBack {
@@ -6,6 +5,7 @@ interface DetalleOrdenBack {
   id_producto: string;
   id_carrito: string;
   precio: number;
+  token: string;
 }
 
 export const detalleOrdenService = async ({
@@ -13,12 +13,11 @@ export const detalleOrdenService = async ({
   id_producto,
   id_carrito,
   precio,
+  token,
 }: DetalleOrdenBack) => {
-  const { token } = useToken();
-
   const subtotal = Number(cantidad) * Number(precio);
 
-  const detalleOrdenBack: DetalleOrdenBack = {
+  const detalleOrdenBack = {
     cantidad,
     id_producto,
     id_carrito,

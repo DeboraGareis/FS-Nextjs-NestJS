@@ -3,6 +3,7 @@ import { useCarrito } from "@/context/CarritoContext";
 import { detalleOrdenService } from "@/app/service/detalleOrdenService";
 import { Button } from "@/app/utils/Button";
 import { ObtenerProductoSegunIdProducto } from "@/app/service/productService";
+import { useToken } from "@/context/TokenContext";
 
 type AgregarProductoType = {
   idProducto?: string;
@@ -14,9 +15,11 @@ type ResBackCarrito = {
   id: string;
   fecha: string;
   total: string;
+  token: string;
 };
 
 const Carrito = ({ idProducto, precio, idUsuario }: AgregarProductoType) => {
+  const { token } = useToken();
   const { agregarOCrearCarrito, obtenerCarritoPorVendedor } = useCarrito();
   //crear carrito y orden de compra
   const handleClick = async () => {
@@ -28,23 +31,27 @@ const Carrito = ({ idProducto, precio, idUsuario }: AgregarProductoType) => {
     // existe carrito para ese vendedor
     const carritoExistente = obtenerCarritoPorVendedor(idVendedor);
 
-    if (carritoExistente) {
+    if (carritoExistente && token) {
       // Si ya existe, solo agrego detalle de orden
       const crearDetalleOrden = {
         cantidad: "1",
         id_producto: idProducto,
         id_carrito: carritoExistente.id,
         precio: precio,
+        token: token,
       };
       await detalleOrdenService(crearDetalleOrden);
     } else {
       // Crear nuevo carrito en el backend
-      const res: ResBackCarrito = await carritoService(
-        idProducto,
-        precio,
-        idUsuario,
-      );
-      agregarOCrearCarrito(res, idVendedor);
+      if (token) {
+        const res: ResBackCarrito = await carritoService(
+          idProducto,
+          precio,
+          idUsuario,
+          token,
+        );
+        agregarOCrearCarrito(res, idVendedor);
+      }
     }
   };
 
