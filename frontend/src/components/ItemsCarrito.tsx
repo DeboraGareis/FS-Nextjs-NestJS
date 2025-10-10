@@ -17,6 +17,7 @@ type DetalleDeOrden = {
   id_producto: string;
   cantidad: number;
   precio: number;
+  subtotal: number;
 };
 
 type Item = {
@@ -43,6 +44,8 @@ export const ItemsCarrito = ({ id }: Carrito) => {
       const resBack = await GetDetallesDeOrdenSegunIdCarrito(id);
 
       setDetallesDeOrden(resBack);
+      console.log("detallesDeOrden:", detallesDeOrden);
+
       const idProductosCarrito = resBack.map((item: any) => item.id_producto);
 
       const idsProductos = [];
@@ -80,10 +83,6 @@ export const ItemsCarrito = ({ id }: Carrito) => {
               : Math.max(Number(detalle.cantidad) - 1, 1);
 
           const subtotal = nuevaCantidad * Number(itemPrecio);
-          console.log("nuevaCantidad", nuevaCantidad);
-
-          console.log("subtotal", subtotal);
-
           // actualiza en el backend??
           ActualizarDetalleDeOrdenSegunId(
             detalle.id,
@@ -95,6 +94,7 @@ export const ItemsCarrito = ({ id }: Carrito) => {
             ...detalle,
             cantidad: nuevaCantidad,
             precio: Number(itemPrecio),
+            subtotal,
           };
         }
         return detalle;
@@ -158,6 +158,17 @@ export const ItemsCarrito = ({ id }: Carrito) => {
                     nombre: {item.nombre}
                     <br />
                     precio x unidad: {item.precio}
+                    <br />
+                    subtotal:
+                    {detallesDeOrden?.map((p) => {
+                      if (p.id_producto === item.id) {
+                        if (!p.subtotal) {
+                          return p.precio;
+                        } else {
+                          return p.subtotal;
+                        }
+                      }
+                    })}
                     <hr className="w-1/3 justify-center my-4" />
                   </li>
                 ))
