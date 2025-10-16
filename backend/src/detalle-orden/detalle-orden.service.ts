@@ -4,10 +4,11 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { NotFoundError } from 'rxjs';
 import { CarritoService } from 'src/carrito/carrito.service';
 import { PrismaService } from 'src/prisma.service';
 import { ProductoService } from 'src/producto/producto.service';
+import { ActualizarDetalleOrdenDto } from './dto/actualizar-detalle-orden.dto';
+import { CrearDetalleOrdenDto } from './dto/crear-detalle-orden.dto';
 
 @Injectable()
 export class DetalleOrdenService {
@@ -17,7 +18,7 @@ export class DetalleOrdenService {
     private readonly carritoService: CarritoService,
   ) {}
 
-  async crearDetalleOrden(crearDetalleOrden) {
+  async crearDetalleOrden(crearDetalleOrden: CrearDetalleOrdenDto) {
     try {
       const { cantidad, id_carrito, id_producto, precio } = crearDetalleOrden;
 
@@ -87,16 +88,38 @@ export class DetalleOrdenService {
     }
   }
 
-  async actualizarIdDetalleDeOrden(id: string, actualizarDetalleOrdenDto) {
+  async actualizarIdDetalleDeOrden(
+    id: string,
+    actualizarDetalleOrdenDto: Partial<ActualizarDetalleOrdenDto>,
+  ) {
+    type DetalleOrdenTabla = {
+      cantidad: string;
+      id_carrito: string;
+      id_producto: string;
+      precio: number;
+    };
     try {
-      const { cantidad, id_carrito, id_producto, precio } =
-        actualizarDetalleOrdenDto;
-      const data: any = {};
-      if (cantidad !== undefined) data.cantidad = cantidad;
+      const { cantidad, id_carrito, id_producto } = actualizarDetalleOrdenDto;
+
+      console.log(
+        'actualizarDetalleOrdenDto',
+        actualizarDetalleOrdenDto,
+        `\n ${typeof actualizarDetalleOrdenDto}`,
+      );
+
+      const data: Partial<DetalleOrdenTabla> = {};
       if (id_carrito !== undefined) data.id_carrito = id_carrito;
       if (id_producto !== undefined) data.id_producto = id_producto;
-      if (precio !== undefined) data.precio = precio;
+      //si cambia la cantidad debe devolver el nuevo valor del precio
+      if (cantidad !== undefined) {
+        const detalleOrden = await this.buscarIdDetalleDeOrden(id);
 
+        const producto = await this.productoService.buscarIdProducto(
+          detalleOrden.id_producto,
+        );
+        const actualizacionPrecio = Number(cantidad) * producto.precio;
+        (data.cantidad = cantidad), (data.precio = actualizacionPrecio);
+      }
       const detalleOrdenActualizado =
         await this.prismaService.detalleOrden.update({
           where: { id: id },

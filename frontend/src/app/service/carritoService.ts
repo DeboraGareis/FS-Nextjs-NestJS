@@ -13,30 +13,38 @@ const carritoService = async (
   idUsuario: string,
   token: string,
 ) => {
-  const fecha = new Date();
+  try {
+    const fecha = new Date();
 
-  const carritoBack: CarritoBack = {
-    fecha: fecha.toISOString().split("T")[0],
-    total: String(precio),
-    id_usuario: idUsuario,
-  };
-  const res = await host.post("/carrito", carritoBack, {
-    headers: {
-      Authorization: "Bearer " + token,
-    },
-  });
-
-  if (res.data.id) {
-    const crearDetalleOrden = {
-      id_carrito: res.data.id,
-      id_producto: idProducto,
-      cantidad: "1",
-      precio: precio,
-      token: token,
+    const carritoBack: CarritoBack = {
+      fecha: fecha.toISOString().split("T")[0],
+      total: String(precio),
+      id_usuario: idUsuario,
     };
-    await detalleOrdenService(crearDetalleOrden);
-  }
+    const res = await host.post("/carrito", carritoBack, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
 
-  return res.data;
+    if (res.data.id) {
+      const crearDetalleOrden = {
+        id_carrito: res.data.id,
+        id_producto: idProducto,
+        cantidad: "1",
+        precio: precio,
+        token: token,
+      };
+
+      await detalleOrdenService(crearDetalleOrden);
+    }
+
+    return res.data;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error.message;
+    }
+    throw new Error("Error");
+  }
 };
 export default carritoService;

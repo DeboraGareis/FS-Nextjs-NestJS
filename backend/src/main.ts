@@ -39,6 +39,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('/api-docs', app, document); // URL: http://localhost:3000/api-docs
 
+  //validadores transformadores del navegador
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

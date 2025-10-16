@@ -20,7 +20,8 @@ type ResBackCarrito = {
 
 const Carrito = ({ idProducto, precio, idUsuario }: AgregarProductoType) => {
   const { token } = useToken();
-  const { agregarOCrearCarrito, obtenerCarritoPorVendedor } = useCarrito();
+  const { carritos, agregarOCrearCarrito, obtenerCarritoPorVendedor } =
+    useCarrito();
   //crear carrito y orden de compra
   const handleClick = async () => {
     if (!idProducto || !precio || !idUsuario) return;
@@ -28,7 +29,6 @@ const Carrito = ({ idProducto, precio, idUsuario }: AgregarProductoType) => {
     const producto = await ObtenerProductoSegunIdProducto(idProducto);
     const idVendedor = producto.idAdministrador;
 
-    // existe carrito para ese vendedor
     const carritoExistente = obtenerCarritoPorVendedor(idVendedor);
 
     if (carritoExistente && token) {

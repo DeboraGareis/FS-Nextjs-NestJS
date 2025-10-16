@@ -38,6 +38,8 @@ export class DetalleOrdenController {
   @ApiOperation({ summary: 'Crear un detalle de orden' })
   @ApiBody({ type: CrearDetalleOrdenDto })
   async crearDetalleOrden(@Body() crearDetalleOrdenDto: CrearDetalleOrdenDto) {
+    console.log('crearDetalleOrdenDto', crearDetalleOrdenDto);
+
     return await this.detalleOrdenService.crearDetalleOrden(
       crearDetalleOrdenDto,
     );

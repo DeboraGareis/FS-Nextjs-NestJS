@@ -1,12 +1,8 @@
-import {
-  ActualizarDetalleDeOrdenSegunId,
-  GetDetallesDeOrdenSegunIdCarrito,
-} from "@/app/service/detalleOrdenService";
+import { GetDetallesDeOrdenSegunIdCarrito } from "@/app/service/detalleOrdenService";
 import { ObtenerProductoSegunIdProducto } from "@/app/service/productService";
 import Image from "next/image";
 import { useState } from "react";
 import BottonCerrar from "./BottonCerrar";
-import BottonMenosOMas from "./BottonMenosOMas";
 
 type Carrito = {
   id: string;
@@ -39,12 +35,9 @@ export const ItemsCarrito = ({ id }: Carrito) => {
 
   const verCarrito = async () => {
     try {
-      console.log("id de ver carrito", id);
-
       const resBack = await GetDetallesDeOrdenSegunIdCarrito(id);
 
       setDetallesDeOrden(resBack);
-      console.log("detallesDeOrden:", detallesDeOrden);
 
       const idProductosCarrito = resBack.map((item: any) => item.id_producto);
 
@@ -60,46 +53,6 @@ export const ItemsCarrito = ({ id }: Carrito) => {
       console.error("Error al obtener el carrito:", err);
       alert("Hubo un error al traer el carrito");
     }
-  };
-
-  const RestarOSumar = async (
-    itemId: string,
-    itemPrecio: string,
-    tipo: "mas" | "menos",
-  ) => {
-    if (!detallesDeOrden) return;
-    console.log("detallesDeOrden", detallesDeOrden);
-
-    setDetallesDeOrden((prev) => {
-      console.log("prev", prev);
-
-      if (!prev) return prev;
-      // Mapeamos los detalles y actualizamos el que coincide
-      return prev.map((detalle) => {
-        if (detalle.id_producto === itemId) {
-          const nuevaCantidad =
-            tipo === "mas"
-              ? Number(detalle.cantidad) + 1
-              : Math.max(Number(detalle.cantidad) - 1, 1);
-
-          const subtotal = nuevaCantidad * Number(itemPrecio);
-          // actualiza en el backend??
-          ActualizarDetalleDeOrdenSegunId(
-            detalle.id,
-            String(nuevaCantidad),
-            subtotal,
-          );
-
-          return {
-            ...detalle,
-            cantidad: nuevaCantidad,
-            precio: Number(itemPrecio),
-            subtotal,
-          };
-        }
-        return detalle;
-      });
-    });
   };
 
   return (
@@ -119,7 +72,9 @@ export const ItemsCarrito = ({ id }: Carrito) => {
       </div>
       {mostrarCarrito && (
         <form className="absolute overflow-auto left-1/6 md:left-1/3 z-50 bg-CFFBEE box-content size-96 px-4 border rounded-md shadow-lg">
-          <BottonCerrar onClick={() => setMostrarCarrito(false)} />
+          <div className="flex items-center justify-end space-x-4">
+            <BottonCerrar onClick={() => setMostrarCarrito(false)} />
+          </div>
           <ul className="list-none">
             {itemsCarrito?.length
               ? itemsCarrito.map((item) => (
@@ -131,21 +86,11 @@ export const ItemsCarrito = ({ id }: Carrito) => {
                       width={40}
                     />
                     cantidad:{" "}
-                    <BottonMenosOMas
-                      simbolo="-"
-                      onClick={() =>
-                        RestarOSumar(item.id, item.precio, "menos")
-                      }
-                    />
                     {detallesDeOrden?.map((p) => {
                       if (p.id_producto === item.id) {
                         return p.cantidad;
                       }
                     })}
-                    <BottonMenosOMas
-                      simbolo="+"
-                      onClick={() => RestarOSumar(item.id, item.precio, "mas")}
-                    />
                     <br />
                     nombre: {item.nombre}
                     <br />

@@ -59,14 +59,14 @@ model Producto {
   idAdministrador String 
   usuario Usuario   @relation(fields: [idAdministrador], references: [id])
   // Relación 1:1 (lado sin `fields` ni `references`)
-  detalle   DetalleOrden?  @relation("ProductoDetalleOrden")
+  detalle   DetalleOrden[]  @relation("ProductoDetalleOrden")
 }
 
 
 model DetalleOrden {
   id          String   @id @default(uuid())
   cantidad    String
-  id_producto String   @unique
+  id_producto String  
   id_carrito  String
   precio      Int
 

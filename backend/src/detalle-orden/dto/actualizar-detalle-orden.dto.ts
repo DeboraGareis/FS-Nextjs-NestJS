@@ -1,6 +1,6 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { CrearDetalleOrdenDto } from './crear-detalle-orden.dto';
-import { IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class ActualizarDetalleOrdenDto extends PartialType(
   CrearDetalleOrdenDto,
@@ -25,11 +25,4 @@ export class ActualizarDetalleOrdenDto extends PartialType(
   @IsOptional()
   @IsUUID()
   id_carrito?: string;
-
-  @ApiProperty({
-    description: 'OPCIONAL-Precio del total del detalle de orden',
-  })
-  @IsOptional()
-  @IsNumber()
-  precio?: number;
 }

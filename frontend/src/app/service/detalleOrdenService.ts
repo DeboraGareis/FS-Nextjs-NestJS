@@ -52,12 +52,11 @@ export const GetDetallesDeOrdenSegunIdCarrito = async (id: string) => {
 export const ActualizarDetalleDeOrdenSegunId = async (
   idDetalleOrden: string,
   cantidad: string,
-  subtotal: number,
 ) => {
   try {
     const actualizacionBack = await host.patch(
       `/detalle-orden/${idDetalleOrden}`,
-      { cantidad: cantidad, precio: subtotal },
+      { cantidad: cantidad },
     );
     return actualizacionBack.data;
   } catch (error: unknown) {
