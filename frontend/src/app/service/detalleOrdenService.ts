@@ -66,3 +66,17 @@ export const ActualizarDetalleDeOrdenSegunId = async (
     throw new Error();
   }
 };
+
+export const EliminarDetalleDeOrdenSegunId = async (idDetalleOrden: string) => {
+  try {
+    const actualizacionBack = await host.delete(
+      `/detalle-orden/${idDetalleOrden}`,
+    );
+    return actualizacionBack.data;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error();
+  }
+};

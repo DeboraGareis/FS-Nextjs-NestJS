@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Button } from "@/app/utils/Button";
 import BottonCerrar from "@/components/BottonCerrar";
@@ -10,9 +10,11 @@ import BottonPanel from "@/components/BottonPanel";
 import { useCarrito } from "@/context/CarritoContext";
 import {
   ActualizarDetalleDeOrdenSegunId,
+  EliminarDetalleDeOrdenSegunId,
   GetDetallesDeOrdenSegunIdCarrito,
 } from "@/app/service/detalleOrdenService";
 import { ObtenerProductoSegunIdProducto } from "@/app/service/productService";
+import { de } from "zod/locales";
 
 const Carrito = () => {
   const { id_vendedor } = useParams();
@@ -24,7 +26,7 @@ const Carrito = () => {
 
   const cerrarVistaCarrito = () => {
     setMostrarCarrito(false);
-    router.push("/private/panel");
+    router.push(`/private/panel/${id_vendedor}`);
   };
 
   useEffect(() => {
@@ -44,6 +46,7 @@ const Carrito = () => {
         );
         if (!productos) {
           alert("...no tienes productos");
+          return;
         }
         setProductosEnCarro(productos);
       }
@@ -56,6 +59,10 @@ const Carrito = () => {
     idDetalleOrden: string,
     nuevaCantidad: number,
   ) => {
+    //si la cantidad es menor a 1, devuelve siempre 1.
+    if (nuevaCantidad < 1) {
+      nuevaCantidad = 1;
+    }
     setDetallesDeCarrito((prevDetalles) =>
       prevDetalles.map((item) =>
         item.id === idDetalleOrden
@@ -69,13 +76,18 @@ const Carrito = () => {
     );
   };
 
-  const eliminarProductoDelCarritoOCarrito = () => {
-    const id: string = String(id_vendedor);
-    limpiarCarritos();
-    //traerme todos los productos del carro, filtrar,
+  const eliminarProductoDelCarritoOCarrito = async (idDetalleOrden) => {
     //si se elimina el unico producto eliminar el carrito y
-    //devolver un mensaje que diga que el carrito fue eliminado
-    return;
+
+    await EliminarDetalleDeOrdenSegunId(idDetalleOrden);
+    const carritoNuevo = detallesDeCarrito.filter(
+      (item) => item.id !== idDetalleOrden,
+    );
+    setDetallesDeCarrito(carritoNuevo);
+    if (carritoNuevo) {
+      alert("producto eliminado.");
+      return;
+    }
   };
 
   return (
@@ -98,17 +110,28 @@ const Carrito = () => {
             </tr>
           </thead>
           <tbody>
-            {productosEnCarro.map((p, i) => (
-              <tr key={p.id}>
-                <td className="flex justify-center">
-                  <Image src={p.imagen} alt={p.nombre} width={50} height={50} />
-                </td>
-                <td className="text-center">{p.nombre}</td>
-
+            {productosEnCarro.map((p) => (
+              <React.Fragment key={p.id}>
                 {detallesDeCarrito.map((item) => {
-                  if (item.id_producto === p.id) {
-                    return (
-                      <td id="cantidad" className="text-center" key={item.id}>
+                  if (item.id_producto !== p.id) return null; // solo renderiza si coincide el producto
+
+                  return (
+                    <tr key={item.id}>
+                      {/* Imagen del producto */}
+                      <td className="flex justify-center">
+                        <Image
+                          src={p.imagen}
+                          alt={p.nombre}
+                          width={50}
+                          height={50}
+                        />
+                      </td>
+
+                      {/* Nombre */}
+                      <td className="text-center">{p.nombre}</td>
+
+                      {/* Cantidad con botones */}
+                      <td id="cantidad" className="text-center">
                         <BottonMenosOMas
                           simbolo="-"
                           onClick={() =>
@@ -129,23 +152,34 @@ const Carrito = () => {
                           }
                         />
                       </td>
-                    );
-                  }
+
+                      {/* Precio */}
+                      <td className="text-center">{p.precio}</td>
+
+                      {/* Subtotal */}
+                      <td id="subtotal" className="text-center font-bold">
+                        {Number(p.precio) * Number(item.cantidad)}
+                      </td>
+
+                      {/* Ícono de eliminar */}
+                      <td className="flex justify-center font-bold">
+                        <Image
+                          src="/trash.svg"
+                          alt="Basurero"
+                          height={25}
+                          width={25}
+                          className="cursor-pointer"
+                          onClick={async () => {
+                            if (item.id_producto === p.id) {
+                              await eliminarProductoDelCarritoOCarrito(item.id);
+                            }
+                          }}
+                        />
+                      </td>
+                    </tr>
+                  );
                 })}
-
-                <td className="text-center ">{p.precio}</td>
-                <td id="subtotal" className="text-center font-bold ">
-                  {detallesDeCarrito.map((item) => {
-                    if (item.id_producto === p.id) {
-                      return Number(p.precio) * Number(item.cantidad);
-                    }
-                  })}
-                </td>
-
-                <td className="flex justify-center font-bold">
-                  <BottonCerrar onClick={eliminarProductoDelCarritoOCarrito} />
-                </td>
-              </tr>
+              </React.Fragment>
             ))}
           </tbody>
         </table>
