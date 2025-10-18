@@ -20,6 +20,7 @@ type CarritoContextType = {
   agregarOCrearCarrito: (nuevo: Carrito, idVendedor: string) => void;
   obtenerCarritoPorVendedor: (idVendedor: string) => Carrito | undefined;
   limpiarCarritos: () => void;
+  limpiarCarrito: (idCarrito: string) => void;
 };
 
 const CarritoContext = createContext<CarritoContextType | undefined>(undefined);
@@ -56,6 +57,12 @@ export function CarritoProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem("carritos");
   };
 
+  const limpiarCarrito = (idCarrito: string) => {
+    const nuevoCarrito = carritos.filter((carrito) => carrito.id !== idCarrito);
+    setCarritos(nuevoCarrito);
+    localStorage.setItem("carritos", JSON.stringify(nuevoCarrito));
+  };
+
   return (
     <CarritoContext.Provider
       value={{
@@ -63,6 +70,7 @@ export function CarritoProvider({ children }: { children: ReactNode }) {
         agregarOCrearCarrito,
         obtenerCarritoPorVendedor,
         limpiarCarritos,
+        limpiarCarrito,
       }}
     >
       {children}

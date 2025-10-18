@@ -1,4 +1,4 @@
-import carritoService from "@/app/service/carritoService";
+import { carritoService } from "@/app/service/carritoService";
 import { useCarrito } from "@/context/CarritoContext";
 import { detalleOrdenService } from "@/app/service/detalleOrdenService";
 import { Button } from "@/app/utils/Button";

@@ -7,7 +7,7 @@ interface CarritoBack {
   id_usuario: string;
 }
 
-const carritoService = async (
+export const carritoService = async (
   idProducto: string,
   precio: number,
   idUsuario: string,
@@ -47,4 +47,15 @@ const carritoService = async (
     throw new Error("Error");
   }
 };
-export default carritoService;
+
+export const deleteCarrito = async (idCarrito: string) => {
+  try {
+    const resBack = await host.delete(`/carrito/${idCarrito}`);
+    return resBack.data;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error.message;
+    }
+    throw new Error();
+  }
+};

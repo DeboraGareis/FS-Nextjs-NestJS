@@ -14,15 +14,34 @@ import {
   GetDetallesDeOrdenSegunIdCarrito,
 } from "@/app/service/detalleOrdenService";
 import { ObtenerProductoSegunIdProducto } from "@/app/service/productService";
-import { de } from "zod/locales";
+import { deleteCarrito } from "@/app/service/carritoService";
 
+type DetalleDeCarrito = {
+  id: string;
+  id_carrito: string;
+  id_producto: string;
+  cantidad: number;
+  precio: number;
+  subtotal: number;
+};
+type ProductosEnCarro = {
+  id: string;
+  imagen: string;
+  nombre: string;
+  precio: string;
+  cantidad: string;
+};
 const Carrito = () => {
   const { id_vendedor } = useParams();
   const router = useRouter();
   const [mostrarCarrito, setMostrarCarrito] = useState(true);
-  const { obtenerCarritoPorVendedor, limpiarCarritos } = useCarrito();
-  const [detallesDeCarrito, setDetallesDeCarrito] = useState<[] | {}[]>([]);
-  const [productosEnCarro, setProductosEnCarro] = useState([]);
+  const { obtenerCarritoPorVendedor, limpiarCarrito } = useCarrito();
+  const [detallesDeCarrito, setDetallesDeCarrito] = useState<
+    DetalleDeCarrito[]
+  >([]);
+  const [productosEnCarro, setProductosEnCarro] = useState<ProductosEnCarro[]>(
+    [],
+  );
 
   const cerrarVistaCarrito = () => {
     setMostrarCarrito(false);
@@ -40,7 +59,7 @@ const Carrito = () => {
         );
         setDetallesDeCarrito(detalleDeOrdenDelCarro);
         const productos = await Promise.all(
-          detalleDeOrdenDelCarro.map(async (detalle) => {
+          detalleDeOrdenDelCarro.map(async (detalle: DetalleDeCarrito) => {
             return await ObtenerProductoSegunIdProducto(detalle.id_producto);
           }),
         );
@@ -76,17 +95,26 @@ const Carrito = () => {
     );
   };
 
-  const eliminarProductoDelCarritoOCarrito = async (idDetalleOrden) => {
-    //si se elimina el unico producto eliminar el carrito y
-
-    await EliminarDetalleDeOrdenSegunId(idDetalleOrden);
-    const carritoNuevo = detallesDeCarrito.filter(
-      (item) => item.id !== idDetalleOrden,
-    );
-    setDetallesDeCarrito(carritoNuevo);
-    if (carritoNuevo) {
-      alert("producto eliminado.");
+  const eliminarProductoDelCarritoOCarrito = async (idDetalleOrden: string) => {
+    //si se elimina un unico producto, se limpia en el local y se elimina el carrito de la base de datos!
+    if (detallesDeCarrito.length === 1) {
+      const idCarrito: string = detallesDeCarrito[0].id_carrito;
+      await deleteCarrito(idCarrito);
+      limpiarCarrito(idCarrito);
+      setDetallesDeCarrito([]);
+      alert("Carrito eliminado");
       return;
+    } else {
+      // elimina el item del detalle de orden, se limpia el local
+      await EliminarDetalleDeOrdenSegunId(idDetalleOrden);
+      const carritoNuevo = detallesDeCarrito.filter(
+        (item) => item.id !== idDetalleOrden,
+      );
+      setDetallesDeCarrito(carritoNuevo);
+      if (carritoNuevo) {
+        alert("producto eliminado.");
+        return;
+      }
     }
   };
 
