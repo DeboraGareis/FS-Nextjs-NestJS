@@ -82,6 +82,19 @@ export class DetalleOrdenController {
     return await this.detalleOrdenService.buscarIdCarrito(id);
   }
 
+  @Get('calcular-total/id-carrito/:id')
+  @ApiOperation({
+    summary: 'Calcular  actualizar el valor total de la tabla CARRITO',
+  })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'El id del carrito',
+  })
+  async calcularTotalDeCarrito(@Param('id', new ParseUUIDPipe()) id: string) {
+    return await this.detalleOrdenService.calcularTotalCarrito(id);
+  }
+
   @Patch(':id')
   @ApiOperation({
     summary: 'Actualizar 1 dato del detalle de orden por ID en la DB',

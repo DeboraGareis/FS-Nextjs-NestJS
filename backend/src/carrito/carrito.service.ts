@@ -53,7 +53,7 @@ export class CarritoService {
 
   async actualizarIdCarrito(
     id: string,
-    actualizarCarritoDto: ActualizarCarritoDto,
+    actualizarCarritoDto: Partial<ActualizarCarritoDto>,
   ) {
     try {
       const { fecha, total, id_usuario } = actualizarCarritoDto;

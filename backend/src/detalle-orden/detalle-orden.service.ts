@@ -101,12 +101,6 @@ export class DetalleOrdenService {
     try {
       const { cantidad, id_carrito, id_producto } = actualizarDetalleOrdenDto;
 
-      console.log(
-        'actualizarDetalleOrdenDto',
-        actualizarDetalleOrdenDto,
-        `\n ${typeof actualizarDetalleOrdenDto}`,
-      );
-
       const data: Partial<DetalleOrdenTabla> = {};
       if (id_carrito !== undefined) data.id_carrito = id_carrito;
       if (id_producto !== undefined) data.id_producto = id_producto;
@@ -133,6 +127,34 @@ export class DetalleOrdenService {
       throw new InternalServerErrorException(error);
     }
   }
+
+  async calcularTotalCarrito(idCarrito: string): Promise<{
+    total: number;
+  }> {
+    try {
+      const detallesOrdenes = await this.buscarIdCarrito(idCarrito);
+      const precios: number[] = detallesOrdenes.map(
+        (detalle) => detalle.precio,
+      );
+      const calculo: number = precios.reduce((acc, precio) => (acc += precio));
+      const totalStr: string = calculo.toString();
+      const actualizoTotal = await this.carritoService.actualizarIdCarrito(
+        idCarrito,
+        {
+          total: totalStr,
+        },
+      );
+      console.log('actualizoTotal', actualizoTotal);
+
+      return { total: calculo };
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new InternalServerErrorException(error);
+    }
+  }
+
   async eliminarIdDetalleDeOrden(id: string) {
     try {
       await this.prismaService.detalleOrden.delete({

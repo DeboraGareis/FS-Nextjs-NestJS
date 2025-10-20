@@ -49,6 +49,20 @@ export const GetDetallesDeOrdenSegunIdCarrito = async (id: string) => {
   }
 };
 
+export const GetTotalDeCarrito = async (id: string) => {
+  try {
+    const resBack = await host.get(
+      `/detalle-orden/calcular-total/id-carrito/${id}`,
+    );
+    return resBack.data;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error();
+  }
+};
+
 export const ActualizarDetalleDeOrdenSegunId = async (
   idDetalleOrden: string,
   cantidad: string,

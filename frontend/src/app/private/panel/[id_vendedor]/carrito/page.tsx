@@ -12,10 +12,14 @@ import {
   ActualizarDetalleDeOrdenSegunId,
   EliminarDetalleDeOrdenSegunId,
   GetDetallesDeOrdenSegunIdCarrito,
+  GetTotalDeCarrito,
 } from "@/app/service/detalleOrdenService";
 import { ObtenerProductoSegunIdProducto } from "@/app/service/productService";
 import { deleteCarrito } from "@/app/service/carritoService";
 
+type TotalCarro = {
+  total: string;
+};
 type DetalleDeCarrito = {
   id: string;
   id_carrito: string;
@@ -34,8 +38,9 @@ type ProductosEnCarro = {
 const Carrito = () => {
   const { id_vendedor } = useParams();
   const router = useRouter();
+  const [total, setTotal] = useState(0);
   const [mostrarCarrito, setMostrarCarrito] = useState(true);
-  const { obtenerCarritoPorVendedor, limpiarCarrito } = useCarrito();
+  const { carritos, obtenerCarritoPorVendedor, limpiarCarrito } = useCarrito();
   const [detallesDeCarrito, setDetallesDeCarrito] = useState<
     DetalleDeCarrito[]
   >([]);
@@ -54,6 +59,10 @@ const Carrito = () => {
       const carrito = obtenerCarritoPorVendedor(id);
 
       if (carrito) {
+        //actualizar el total del carrito
+        const totalCarrito: TotalCarro = await GetTotalDeCarrito(carrito.id);
+        carrito.total = totalCarrito.total;
+
         const detalleDeOrdenDelCarro = await GetDetallesDeOrdenSegunIdCarrito(
           carrito.id,
         );
@@ -79,9 +88,8 @@ const Carrito = () => {
     nuevaCantidad: number,
   ) => {
     //si la cantidad es menor a 1, devuelve siempre 1.
-    if (nuevaCantidad < 1) {
-      nuevaCantidad = 1;
-    }
+    if (nuevaCantidad < 1) return;
+
     setDetallesDeCarrito((prevDetalles) =>
       prevDetalles.map((item) =>
         item.id === idDetalleOrden
@@ -89,10 +97,26 @@ const Carrito = () => {
           : item,
       ),
     );
-    await ActualizarDetalleDeOrdenSegunId(
-      idDetalleOrden,
-      String(nuevaCantidad),
-    );
+
+    try {
+      await ActualizarDetalleDeOrdenSegunId(
+        idDetalleOrden,
+        String(nuevaCantidad),
+      );
+    } catch (error) {
+      console.error("Error al actualizar cantidad:", error);
+    }
+  };
+
+  const calcularTotalLocal = (
+    detalles: DetalleDeCarrito[],
+    productos: ProductosEnCarro[],
+  ) => {
+    return detalles.reduce((acc, item) => {
+      const producto = productos.find((p) => p.id === item.id_producto);
+      if (!producto) return acc;
+      return acc + Number(producto.precio) * Number(item.cantidad);
+    }, 0);
   };
 
   const eliminarProductoDelCarritoOCarrito = async (idDetalleOrden: string) => {
@@ -216,8 +240,9 @@ const Carrito = () => {
         <div className="flex justify-end ">
           <div className="border border-emerald-600 w-1/2 "></div>
         </div>
+        {/* Calculo total en el front */}
         <div className="flex justify-end sm:mt-2 md:mt-4  font-black ">
-          TOTAL:
+          TOTAL: {calcularTotalLocal(detallesDeCarrito, productosEnCarro)}
         </div>
         <div className="flex justify-end sm:mt-6 md:mt-10">
           <Button
